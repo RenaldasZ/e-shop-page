@@ -1,9 +1,13 @@
+import { CssBaseline } from "@mui/material";
 import "./App.css";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
     <>
-      <div>Beginning of an app..</div>
+      <CssBaseline />
+      <Navbar />
+      <div>Beginning of an app...</div>
     </>
   );
 }
