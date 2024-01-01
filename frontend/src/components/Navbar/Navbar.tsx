@@ -80,6 +80,7 @@ export default function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
+                mt: "7px",
               }}
             >
               {pages.map((page) => (
