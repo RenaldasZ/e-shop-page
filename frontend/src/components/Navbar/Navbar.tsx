@@ -14,8 +14,13 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 import React from "react";
+import { Link } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = [
+  { title: "Home", path: "/" },
+  { title: "Login", path: "/Login" },
+  { title: "Register", path: "/Register" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function Navbar() {
@@ -51,8 +56,6 @@ export default function Navbar() {
           />
           <Typography
             variant="h6"
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -60,10 +63,11 @@ export default function Navbar() {
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
-              textDecoration: "none",
             }}
           >
-            uBlogger
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              uBlogger
+            </Link>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -80,15 +84,21 @@ export default function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
+                mt: "7px",
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
                   <Typography
                     sx={{ fontFamily: "monospace", fontWeight: 700 }}
                     textAlign="center"
                   >
-                    {page}
+                    <Link
+                      to={page.path}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      {page.title}
+                    </Link>
                   </Typography>
                 </MenuItem>
               ))}
@@ -99,8 +109,6 @@ export default function Navbar() {
           />
           <Typography
             variant="h5"
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -110,15 +118,17 @@ export default function Navbar() {
               fontSize: { xs: 20, sm: 26 },
               letterSpacing: { xs: ".01rem", sm: ".3rem" },
               color: "inherit",
-              textDecoration: "none",
             }}
           >
-            uBlogger
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              uBlogger
+            </Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.title}
+                href={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
@@ -134,7 +144,7 @@ export default function Navbar() {
                     letterSpacing: ".15rem",
                   }}
                 >
-                  {page}
+                  {page.title}
                 </Typography>
               </Button>
             ))}
