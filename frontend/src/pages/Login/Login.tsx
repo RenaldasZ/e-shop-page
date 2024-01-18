@@ -9,14 +9,13 @@ import { Paper } from "@mui/material";
 import { Link } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
-import { ErrorSharp } from "@mui/icons-material";
 
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors, isValid },
-  } = useForm({ mode: 'onTouched' });
+  } = useForm({ mode: "onTouched" });
 
   function submitForm(data: FieldValues) {
     console.log(data);
@@ -59,7 +58,14 @@ export default function Login() {
           error={!!errors.password}
           helperText={errors?.password?.message as string}
         />
-        <LoadingButton disabled={!isValid} loading={isSubmitting} type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <LoadingButton
+          disabled={!isValid}
+          loading={isSubmitting}
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
           Sign In
         </LoadingButton>
         <Grid container>
