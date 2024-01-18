@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
       { path: "/", element: <Homepage /> },
       { path: "/Login", element: <Login /> },
       { path: "/Register", element: <Register /> },
-      { path: "not-found", element: <NotFound /> },
+      { path: "/not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },
