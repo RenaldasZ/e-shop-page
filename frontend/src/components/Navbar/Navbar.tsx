@@ -11,6 +11,7 @@ import {
   Tooltip,
   Avatar,
   Switch,
+  Badge,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
@@ -18,6 +19,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../context/LoginContext";
 import { toast } from "react-toastify";
+import { ShoppingCart } from "@mui/icons-material";
 
 interface Props {
   handleThemeChange: () => void;
@@ -158,6 +160,12 @@ export default function Navbar({ handleThemeChange }: Props) {
               </Button>
             ))}
           </Box>
+
+          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+            <Badge badgeContent="-1" color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
 
           <Box display="flex">
             <Typography
