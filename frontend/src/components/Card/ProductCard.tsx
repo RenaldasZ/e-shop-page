@@ -4,30 +4,38 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Product } from "../../models/product";
 
-export default function ProductCard() {
+interface Props {
+  product: Product;
+}
+
+export default function ProductCard({ product }: Props) {
+
   return (
     <Card
       sx={{
+        height: "100%",
         maxWidth: 345,
-        border: "1px solid white",
+        border: "3px solid white",
         marginLeft: "5px",
         marginTop: "15px",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <CardMedia sx={{ height: 140 }} image="/static/images/cards/contemplative-reptile.jpg" title="green iguana" />
+      <CardMedia sx={{ height: 140 }} image={product.pictureUrl} title={product.name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {product.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents
-          except Antarctica
+          {product.brand} / {product.type}
         </Typography>
       </CardContent>
-      <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button size="small">Review</Button>
-        <Button size="small">Learn More</Button>
+      <CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
+        <Button size="small">Add to Cart</Button>
+        <Button size="small">View</Button>
       </CardActions>
     </Card>
   );
