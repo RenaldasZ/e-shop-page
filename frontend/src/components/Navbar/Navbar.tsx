@@ -180,7 +180,7 @@ export default function Navbar({ handleThemeChange }: Props) {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={`${userName}`} src="/static/images/avatar/2.jpg" />
+                  <Avatar alt={`${userName}`.toUpperCase()} src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
               <Menu
