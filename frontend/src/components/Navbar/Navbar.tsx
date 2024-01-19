@@ -49,7 +49,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
   };
 
   return (
-    <AppBar color="warning" position="static">
+    <AppBar color="transparent" position="static"  elevation={5}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <BookOutlinedIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -58,8 +58,8 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
+              fontFamily: "sans-serif",
+              fontWeight: 500,
               letterSpacing: ".3rem",
               color: "inherit",
             }}
@@ -84,7 +84,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ fontFamily: "monospace", fontWeight: 700 }} textAlign="center">
+                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500, color: 'inherit' }} textAlign="center">
                     <Link to={page.path} style={{ textDecoration: "none", color: "inherit" }}>
                       {page.title}
                     </Link>
@@ -99,8 +99,8 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
+              fontFamily: "sans-serif",
+              fontWeight: 500,
               fontSize: { xs: 17, sm: 26 },
               letterSpacing: { xs: ".01rem", sm: ".3rem" },
               color: "inherit",
@@ -119,14 +119,14 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: "white",
+                  color: "inherit",
                   display: "block",
                 }}
               >
                 <Typography
                   sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 700,
+                    fontFamily: "sans-serif",
+                    fontWeight: 500,
                     fontSize: 18,
                     letterSpacing: ".15rem",
                   }}
@@ -142,8 +142,8 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
               variant="h6"
               sx={{
                 display: { xs: "none", md: "block" },
-                fontFamily: "monospace",
-                fontWeight: 700,
+                fontFamily: "sans-serif",
+                fontWeight: 500,
                 letterSpacing: ".1rem",
                 color: "inherit",
                 mt: "3px",
@@ -172,7 +172,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ fontFamily: "monospace", fontWeight: 700 }} textAlign="center">
+                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
                     {setting}
                   </Typography>
                 </MenuItem>
