@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from api.models import Customer 
@@ -34,7 +36,30 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user = User.objects.create_user(**validated_data)
         Customer.objects.create(user=user).save()
         return user
-    
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+
+            if user:
+                if user.is_active:
+                    data['user'] = user
+                else:
+                    raise serializers.ValidationError("User account is not active.")
+            else:
+                raise serializers.ValidationError("Invalid username or password.")
+        else:
+            raise serializers.ValidationError("Must provide both username and password.")
+
+        return data
+
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     user_username = serializers.CharField(source='user.username', read_only=True)
     
