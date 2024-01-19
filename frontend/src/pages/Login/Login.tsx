@@ -32,9 +32,8 @@ export default function Login() {
     setIsLoading(true);
     agent.Users.loginUser(data)
       .then((response) => {
-        console.log(response);
-        //ideti response.username i local storage ir setUserName
-
+        localStorage.setItem("username-eshop", response.username);
+        setUserName(response.username);
         setLoggedUser(response);
         localStorage.setItem("userId-eshop", response.user_id);
         setUserId(response.user_id);
