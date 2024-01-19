@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
+from api.models import Customer 
 
 
 # Serializers define the API representation.
@@ -31,4 +32,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        Customer.objects.create(user=user).save()
         return user
+    
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+    user_username = serializers.CharField(source='user.username', read_only=True)
+    
+    class Meta:
+        model = Customer
+        fields = ['url', 'user', 'user_username']
