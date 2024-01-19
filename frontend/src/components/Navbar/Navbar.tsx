@@ -27,7 +27,7 @@ interface Props {
 export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const { darkMode } = useContext(LoginContext);
+  const { darkMode, userName } = useContext(LoginContext);
   const { userId, setUserId } = useContext(LoginContext);
   const navigation = useNavigate();
 
@@ -180,7 +180,7 @@ export default function Navbar({ handleThemeChange }: Props) {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Ernestas" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt={`${userName}`} src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
               <Menu
