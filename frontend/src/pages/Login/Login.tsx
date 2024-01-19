@@ -18,7 +18,7 @@ import { LoginContext } from "../../context/LoginContext";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loggedUser, setLoggedUser] = useState(null);
-  const { setUserId, userId } = useContext(LoginContext);
+  const { setUserId, userId, setUserName } = useContext(LoginContext);
 
   const navigation = useNavigate();
 
@@ -32,6 +32,9 @@ export default function Login() {
     setIsLoading(true);
     agent.Users.loginUser(data)
       .then((response) => {
+        console.log(response);
+        //ideti response.username i local storage ir setUserName
+
         setLoggedUser(response);
         localStorage.setItem("userId-eshop", response.user_id);
         setUserId(response.user_id);
@@ -64,7 +67,7 @@ export default function Login() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Log in
       </Typography>
       <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
         <TextField

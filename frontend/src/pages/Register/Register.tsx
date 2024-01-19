@@ -1,10 +1,10 @@
 import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import agent from "../../api/agent";
 import { toast } from "react-toastify";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 interface IFormInput {
   username: string;
@@ -36,7 +36,7 @@ export default function Register() {
     agent.Users.registerUser(regData)
       .then(() => {
         toast.success("Registration Successful");
-        navigation("/");
+        navigation("/Login");
       })
       .catch((error) => {
         const errorDetails = error.response.data;
@@ -65,8 +65,8 @@ export default function Register() {
         p: 4,
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockOutlinedIcon />
+      <Avatar sx={{ m: 1, bgcolor: "warning.main" }}>
+        <AppRegistrationIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Register
