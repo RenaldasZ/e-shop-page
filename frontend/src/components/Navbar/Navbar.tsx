@@ -48,9 +48,6 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
     setAnchorElUser(null);
   };
 
-  console.log(darkMode);
-  
-
   return (
     <AppBar color="warning" position="static">
       <Container maxWidth="xl">
@@ -117,7 +114,8 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             {pages.map((page) => (
               <Button
                 key={page.title}
-                href={page.path}
+                component={Link}
+                to={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
@@ -151,7 +149,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
                 mt: "3px",
               }}
             >
-              {!darkMode ? "Dark Mode" : "Light Mode" }
+              {!darkMode ? "Dark Mode" : "Light Mode"}
             </Typography>
             <Switch checked={darkMode} onChange={handleThemeChange} sx={{ mr: 2 }} />
           </Box>
