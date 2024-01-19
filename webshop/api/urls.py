@@ -1,7 +1,5 @@
 from django.urls import path, include
-from . router import router
-
-
+from api.rest.router import router
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
