@@ -15,15 +15,9 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../context/LoginContext";
-
-const pages = [
-  { title: "Home", path: "/" },
-  { title: "Login", path: "/Login" },
-  { title: "Register", path: "/Register" },
-];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { toast } from "react-toastify";
 
 interface Props {
   handleThemeChange: () => void;
@@ -34,6 +28,32 @@ export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const { darkMode } = useContext(LoginContext);
+  const { userId, setUserId } = useContext(LoginContext);
+  const navigation = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId-eshop");
+    setUserId(null);
+    setAnchorElUser(null);
+    toast.success("You Have Succesfully Logged Out");
+    navigation("/");
+  };
+
+  const pages =
+    userId === null
+      ? [
+          { title: "Home", path: "/" },
+          { title: "Login", path: "/Login" },
+          { title: "Register", path: "/Register" },
+        ]
+      : [{ title: "Home", path: "/" }];
+
+  const settings = [
+    { title: "Profile" },
+    { title: "Account" },
+    { title: "Dashboard" },
+    { title: "Logout", action: handleLogout },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -156,31 +176,41 @@ export default function Navbar({ handleThemeChange }: Props) {
             <Switch checked={darkMode} onChange={handleThemeChange} defaultChecked sx={{ mr: 2 }} />
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Ernestas" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {userId != null && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Ernestas" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) =>
+                  setting.title === "Logout" ? (
+                    <MenuItem key={setting.title} onClick={setting.action}>
+                      <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
+                        Logout
+                      </Typography>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+                      <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
+                        {setting.title}
+                      </Typography>
+                    </MenuItem>
+                  )
+                )}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

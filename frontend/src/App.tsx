@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
 import { useContext, useState } from "react";
 import { LoginContext } from "./context/LoginContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const { darkMode, setDarkMode } = useContext(LoginContext);
@@ -29,6 +31,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer closeOnClick position="bottom-right" theme="colored" />
       <CssBaseline />
       <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
       <Container sx={{ mt: 4 }}>
