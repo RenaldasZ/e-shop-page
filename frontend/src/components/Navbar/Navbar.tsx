@@ -173,7 +173,7 @@ export default function Navbar({ handleThemeChange }: Props) {
             >
               {darkMode ? "Dark Mode" : "Light Mode"}
             </Typography>
-            <Switch checked={darkMode} onChange={handleThemeChange} defaultChecked sx={{ mr: 2 }} />
+            <Switch checked={darkMode} onChange={handleThemeChange} sx={{ mr: 2 }} />
           </Box>
 
           {userId != null && (

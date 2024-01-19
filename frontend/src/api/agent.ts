@@ -10,9 +10,8 @@ const requests = {
 };
 
 const Users = {
-  getUsers: () => requests.get("users/"),
   loginUser: (values: object) => requests.post("login/", values),
-  registerUsers: (values: object) => requests.post("users/", values),
+  registerUser: (values: object) => requests.post("users/", values),
 };
 
 const agent = {
