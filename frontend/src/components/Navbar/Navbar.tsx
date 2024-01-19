@@ -10,6 +10,7 @@ import {
   Button,
   Tooltip,
   Avatar,
+  Switch,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
@@ -23,13 +24,14 @@ const pages = [
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-export default function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+interface Props {
+  handleThemeChange: () => void;
+  darkMode: boolean;
+}
+
+export default function Navbar({ handleThemeChange, darkMode }: Props) {
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -50,10 +52,7 @@ export default function Navbar() {
     <AppBar color="warning" position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <BookOutlinedIcon
-            fontSize="large"
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          />
+          <BookOutlinedIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             sx={{
@@ -66,16 +65,12 @@ export default function Navbar() {
             }}
           >
             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-              uBlogger
+              e-shop
             </Link>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
+            <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
               <MenuIcon />
             </IconButton>
             <Menu
@@ -89,14 +84,8 @@ export default function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography
-                    sx={{ fontFamily: "monospace", fontWeight: 700 }}
-                    textAlign="center"
-                  >
-                    <Link
-                      to={page.path}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
+                  <Typography sx={{ fontFamily: "monospace", fontWeight: 700 }} textAlign="center">
+                    <Link to={page.path} style={{ textDecoration: "none", color: "inherit" }}>
                       {page.title}
                     </Link>
                   </Typography>
@@ -104,31 +93,29 @@ export default function Navbar() {
               ))}
             </Menu>
           </Box>
-          <BookOutlinedIcon
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          />
+          {/* <BookOutlinedIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Typography
-            variant="h5"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontFamily: "monospace",
               fontWeight: 700,
-              fontSize: { xs: 20, sm: 26 },
+              fontSize: { xs: 17, sm: 26 },
               letterSpacing: { xs: ".01rem", sm: ".3rem" },
               color: "inherit",
             }}
           >
             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-              uBlogger
+              e-shop
             </Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.title}
-                href={page.path}
+                component={Link}
+                to={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
@@ -150,6 +137,23 @@ export default function Navbar() {
             ))}
           </Box>
 
+          <Box display="flex">
+            <Typography
+              variant="h6"
+              sx={{
+                display: { xs: "none", md: "block" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".1rem",
+                color: "inherit",
+                mt: "3px",
+              }}
+            >
+              {!darkMode ? "Dark Mode" : "Light Mode"}
+            </Typography>
+            <Switch checked={darkMode} onChange={handleThemeChange} sx={{ mr: 2 }} />
+          </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -168,10 +172,7 @@ export default function Navbar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography
-                    sx={{ fontFamily: "monospace", fontWeight: 700 }}
-                    textAlign="center"
-                  >
+                  <Typography sx={{ fontFamily: "monospace", fontWeight: 700 }} textAlign="center">
                     {setting}
                   </Typography>
                 </MenuItem>
