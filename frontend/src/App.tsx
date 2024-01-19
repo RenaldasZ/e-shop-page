@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
@@ -11,6 +11,9 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: paletteType,
+      background: {
+        default: paletteType === "light" ? "#eaeaea" : "#121212",
+      },
     },
   });
 
@@ -22,7 +25,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
-      <Outlet />
+      <Container sx={{ mt: 4 }}>
+        <Outlet />
+      </Container>
     </ThemeProvider>
   );
 }
