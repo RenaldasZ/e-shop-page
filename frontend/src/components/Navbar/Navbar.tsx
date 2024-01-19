@@ -14,8 +14,9 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { LoginContext } from "../../context/LoginContext";
 
 const pages = [
   { title: "Home", path: "/" },
@@ -29,9 +30,10 @@ interface Props {
   darkMode: boolean;
 }
 
-export default function Navbar({ handleThemeChange, darkMode }: Props) {
+export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const { darkMode } = useContext(LoginContext);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -49,7 +51,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
   };
 
   return (
-    <AppBar color="transparent" position="static"  elevation={5}>
+    <AppBar color="transparent" position="static" elevation={5}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <BookOutlinedIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -84,7 +86,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500, color: 'inherit' }} textAlign="center">
+                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500, color: "inherit" }} textAlign="center">
                     <Link to={page.path} style={{ textDecoration: "none", color: "inherit" }}>
                       {page.title}
                     </Link>
@@ -149,9 +151,9 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
                 mt: "3px",
               }}
             >
-              {!darkMode ? "Dark Mode" : "Light Mode"}
+              {darkMode ? "Dark Mode" : "Light Mode"}
             </Typography>
-            <Switch checked={darkMode} onChange={handleThemeChange} sx={{ mr: 2 }} />
+            <Switch checked={darkMode} onChange={handleThemeChange} defaultChecked sx={{ mr: 2 }} />
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

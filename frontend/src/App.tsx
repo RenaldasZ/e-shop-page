@@ -1,12 +1,15 @@
-import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Container, CssBaseline, PaletteMode, ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LoginContext } from "./context/LoginContext";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const paletteType = darkMode ? "dark" : "light";
+  const { darkMode, setDarkMode } = useContext(LoginContext);
+  const [paletteType, setPaletteType] = useState<PaletteMode>(
+    (localStorage.getItem("darkMode") as PaletteMode) || "light"
+  );
 
   const theme = createTheme({
     palette: {
@@ -18,7 +21,10 @@ function App() {
   });
 
   function handleThemeChange() {
+    const newMode = darkMode ? "light" : "dark";
+    localStorage.setItem("darkMode", newMode);
     setDarkMode(!darkMode);
+    setPaletteType(newMode);
   }
 
   return (
