@@ -1,5 +1,5 @@
 import { Paper, Box } from "@mui/material";
-import BlogCard from "../../components/Card/BlogCard";
+import Catalog from "../../components/Catalog/Catalog";
 
 export default function Homepage() {
   return (
@@ -10,7 +10,7 @@ export default function Homepage() {
       }}
     >
       <Box component={Paper} elevation={8} sx={{ m: 2, p: 2 }}>
-        <BlogCard />
+        <Catalog />
       </Box>
     </Box>
   );
