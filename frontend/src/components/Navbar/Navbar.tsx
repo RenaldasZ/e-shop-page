@@ -75,7 +75,7 @@ export default function Navbar({ handleThemeChange }: Props) {
   return (
     <AppBar color="transparent" position="static" elevation={5}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar sx={{ width: "100%", justifyContent: "space-between" }} disableGutters>
           <BookOutlinedIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
