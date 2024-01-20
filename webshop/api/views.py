@@ -19,16 +19,6 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             # Perform any additional actions or return response as needed
-            return Response({'message': 'Login successful', 'user_id': user.id})
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class LoginView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            # Perform any additional actions or return response as needed
             return Response({'message': 'Login successful', 'user_id': user.id, 'username': user.username})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
