@@ -11,10 +11,29 @@ export default function Catalog({ products }: Props) {
     <Grid
       container
       spacing={4}
-      sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "stretch", pb: 3 }}
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        pb: 3,
+      }}
     >
       {products.map((product, index) => (
-        <Grid item xs={12} sm={6} md={6} xl={4} key={index}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          xl={4}
+          key={index}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            transition: "transform 0.3s ease-in-out",
+            "&:hover": {
+              transform: "scale(1.04)",
+            },
+          }}
+        >
           <ProductCard product={product} />
         </Grid>
       ))}
