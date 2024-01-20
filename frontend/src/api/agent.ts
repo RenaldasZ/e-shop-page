@@ -14,8 +14,14 @@ const Users = {
   registerUser: (values: object) => requests.post("users/", values),
 };
 
+const Catalog = {
+  getProducts: (pageNumber: number) => requests.get(`products/?page=${pageNumber}`),
+  getSingleProduct: (id: string) => requests.get(`products/${id}`),
+};
+
 const agent = {
   Users,
+  Catalog,
 };
 
 export default agent;
