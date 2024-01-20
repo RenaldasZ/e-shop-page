@@ -5,26 +5,34 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Product } from "../../models/product";
+import { Link } from "react-router-dom";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
-
   return (
     <Card
       sx={{
         height: "100%",
+        width: "100%",
         maxWidth: 345,
         border: "3px solid white",
         marginLeft: "5px",
         marginTop: "15px",
         display: "flex",
         flexDirection: "column",
+        alignItems: "stretch",
       }}
     >
-      <CardMedia sx={{ height: 140 }} image={product.pictureUrl} title={product.name} />
+      <CardMedia
+        sx={{
+          height: 140,
+        }}
+        image={product.pictureUrl}
+        title={product.name}
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {product.name}
@@ -35,7 +43,9 @@ export default function ProductCard({ product }: Props) {
       </CardContent>
       <CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
         <Button size="small">Add to Cart</Button>
-        <Button size="small">View</Button>
+        <Button component={Link} to={`/catalog/${product.id}`} size="small">
+          View
+        </Button>
       </CardActions>
     </Card>
   );
