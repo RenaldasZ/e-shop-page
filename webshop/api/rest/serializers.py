@@ -37,6 +37,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         Customer.objects.create(user=user).save()
         return user
 
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'email']
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
