@@ -6,11 +6,22 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Paper } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import agent from "../../api/agent";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
+import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
+import { LoginContext } from "../../context/LoginContext";
 
 export default function Login() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [loggedUser, setLoggedUser] = useState(null);
+  const { setUserId, userId, setUserName } = useContext(LoginContext);
+
+  const navigation = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -18,7 +29,25 @@ export default function Login() {
   } = useForm({ mode: "onTouched" });
 
   function submitForm(data: FieldValues) {
-    console.log(data);
+    setIsLoading(true);
+    agent.Users.loginUser(data)
+      .then((response) => {
+        localStorage.setItem("username-eshop", response.username);
+        setUserName(response.username);
+        setLoggedUser(response);
+        localStorage.setItem("userId-eshop", response.user_id);
+        setUserId(response.user_id);
+        toast.success(response.message);
+        navigation("/");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.non_field_errors[0]);
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  if (isLoading) {
+    return <LoadingComponent message="Logging In" />;
   }
 
   return (
@@ -37,14 +66,13 @@ export default function Login() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Log in
       </Typography>
       <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
           label="Username"
-          autoFocus
           {...register("username", { required: "Username is required" })}
           error={!!errors.username}
           helperText={errors?.username?.message as string}
@@ -59,14 +87,14 @@ export default function Login() {
           helperText={errors?.password?.message as string}
         />
         <LoadingButton
-          disabled={!isValid}
+          disabled={!isValid || loggedUser != null}
           loading={isSubmitting}
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign In
+          {userId === null ? "Sing In" : "You Already Logged In"}
         </LoadingButton>
         <Grid container>
           <Grid item>
