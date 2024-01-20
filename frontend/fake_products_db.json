@@ -7,7 +7,8 @@
     "pictureUrl": "/image1.png",
     "brand": "Angular",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "xs"
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "pictureUrl": "/image2.png",
     "brand": "Angular",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "pictureUrl": "/image3.png",
     "brand": "NetCore",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "md"
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "pictureUrl": "/image1.png",
     "brand": "NetCore",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "xl"
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@
     "pictureUrl": "/image2.png",
     "brand": "React",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "xl"
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "pictureUrl": "/image3.png",
     "brand": "TypeScript",
     "type": "Boards",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "md"
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@
     "pictureUrl": "/image1.png",
     "brand": "NetCore",
     "type": "Hats",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 8,
@@ -77,7 +84,8 @@
     "pictureUrl": "/image2.png",
     "brand": "React",
     "type": "Hats",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sx"
   },
   {
     "id": 9,
@@ -87,7 +95,8 @@
     "pictureUrl": "/image3.png",
     "brand": "React",
     "type": "Hats",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sx"
   },
   {
     "id": 10,
@@ -97,7 +106,8 @@
     "pictureUrl": "/image1.png",
     "brand": "VS Code",
     "type": "Gloves",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 11,
@@ -107,7 +117,8 @@
     "pictureUrl": "/image2.png",
     "brand": "VS Code",
     "type": "Gloves",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "md"
   },
   {
     "id": 12,
@@ -117,7 +128,8 @@
     "pictureUrl": "/image3.png",
     "brand": "React",
     "type": "Gloves",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "xl"
   },
   {
     "id": 13,
@@ -127,7 +139,8 @@
     "pictureUrl": "/image1.png",
     "brand": "React",
     "type": "Gloves",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 14,
@@ -137,7 +150,8 @@
     "pictureUrl": "/image2.png",
     "brand": "Redis",
     "type": "Boots",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "md"
   },
   {
     "id": 15,
@@ -147,7 +161,8 @@
     "pictureUrl": "/image3.png",
     "brand": "NetCore",
     "type": "Boots",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "xl"
   },
   {
     "id": 16,
@@ -157,7 +172,8 @@
     "pictureUrl": "/image1.png",
     "brand": "NetCore",
     "type": "Boots",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 17,
@@ -167,7 +183,8 @@
     "pictureUrl": "/image2.png",
     "brand": "Angular",
     "type": "Boots",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "sm"
   },
   {
     "id": 18,
@@ -177,6 +194,7 @@
     "pictureUrl": "/image3.png",
     "brand": "Angular",
     "type": "Boots",
-    "quantityInStock": 100
+    "quantityInStock": 100,
+    "productSize": "md"
   }
 ]
