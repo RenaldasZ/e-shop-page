@@ -3,7 +3,7 @@ import ProductCard from "../Card/ProductCard";
 import { Grid } from "@mui/material";
 
 interface Props {
-  products: Product[];
+  products: Product[] | null;
 }
 
 export default function Catalog({ products }: Props) {
@@ -17,7 +17,7 @@ export default function Catalog({ products }: Props) {
         pb: 3,
       }}
     >
-      {products.map((product, index) => (
+      {products?.map((product, index) => (
         <Grid
           item
           xs={12}
