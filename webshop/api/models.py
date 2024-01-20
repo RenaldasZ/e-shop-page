@@ -8,7 +8,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    pictureUrl =  models.ImageField(name="pictureUrl", default="image1.png", upload_to="products")
+    pictureUrl =  models.CharField(max_length=256, name="pictureUrl", default="/image1.png")
     brand = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
     quantityInStock = models.IntegerField(default=5)
