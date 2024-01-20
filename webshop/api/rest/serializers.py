@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from api.models import Customer 
+from api.models import Customer, Product
 
 
 # Serializers define the API representation.
@@ -65,9 +65,15 @@ class LoginSerializer(serializers.Serializer):
 
         return data
 
+# Database serializers
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     user_username = serializers.CharField(source='user.username', read_only=True)
     
     class Meta:
         model = Customer
         fields = ['url', 'user', 'user_username']
+
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['url', 'name', 'description', 'price', 'pictureUrl', 'brand', 'type', 'quantityInStock', 'productSize']
