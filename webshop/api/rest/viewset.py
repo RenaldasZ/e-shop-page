@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from api.rest.serializers import UserSerializer, CustomerSerializer, ProductSerializer
 from api.models import Customer, Product
+from api.rest.paginator import StandardResultsSetPagination
  
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -16,4 +17,5 @@ class CustomerViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = StandardResultsSetPagination
 
