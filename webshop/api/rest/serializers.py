@@ -10,7 +10,7 @@ from api.models import Customer
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'password', 'is_staff']
+        fields = ['url', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_password(self, value):
