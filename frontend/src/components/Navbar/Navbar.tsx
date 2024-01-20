@@ -11,27 +11,51 @@ import {
   Tooltip,
   Avatar,
   Switch,
+  Badge,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import React from "react";
-import { Link } from "react-router-dom";
-
-const pages = [
-  { title: "Home", path: "/" },
-  { title: "Login", path: "/Login" },
-  { title: "Register", path: "/Register" },
-];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginContext } from "../../context/LoginContext";
+import { toast } from "react-toastify";
+import { ShoppingCart } from "@mui/icons-material";
 
 interface Props {
   handleThemeChange: () => void;
   darkMode: boolean;
 }
 
-export default function Navbar({ handleThemeChange, darkMode }: Props) {
+export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const { darkMode, userName } = useContext(LoginContext);
+  const { userId, setUserId } = useContext(LoginContext);
+  const navigation = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId-eshop");
+    setUserId(null);
+    setAnchorElUser(null);
+    toast.success("You Have Succesfully Logged Out");
+    navigation("/");
+  };
+
+  const pages =
+    userId === null
+      ? [
+          { title: "Home", path: "/" },
+          { title: "Login", path: "/Login" },
+          { title: "Register", path: "/Register" },
+        ]
+      : [{ title: "Home", path: "/" }];
+
+  const settings = [
+    { title: "Profile" },
+    { title: "Account" },
+    { title: "Dashboard" },
+    { title: "Logout", action: handleLogout },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -49,7 +73,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
   };
 
   return (
-    <AppBar color="transparent" position="static"  elevation={5}>
+    <AppBar color="transparent" position="static" elevation={5}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <BookOutlinedIcon fontSize="large" sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -84,7 +108,7 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             >
               {pages.map((page) => (
                 <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500, color: 'inherit' }} textAlign="center">
+                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500, color: "inherit" }} textAlign="center">
                     <Link to={page.path} style={{ textDecoration: "none", color: "inherit" }}>
                       {page.title}
                     </Link>
@@ -137,6 +161,12 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
             ))}
           </Box>
 
+          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+            <Badge badgeContent="-1" color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+
           <Box display="flex">
             <Typography
               variant="h6"
@@ -149,36 +179,46 @@ export default function Navbar({ handleThemeChange, darkMode }: Props) {
                 mt: "3px",
               }}
             >
-              {!darkMode ? "Dark Mode" : "Light Mode"}
+              {darkMode ? "Dark Mode" : "Light Mode"}
             </Typography>
             <Switch checked={darkMode} onChange={handleThemeChange} sx={{ mr: 2 }} />
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Ernestas" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {userId != null && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={`${userName}`.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) =>
+                  setting.title === "Logout" ? (
+                    <MenuItem key={setting.title} onClick={setting.action}>
+                      <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
+                        Logout
+                      </Typography>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+                      <Typography sx={{ fontFamily: "sans-serif", fontWeight: 500 }} textAlign="center">
+                        {setting.title}
+                      </Typography>
+                    </MenuItem>
+                  )
+                )}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
