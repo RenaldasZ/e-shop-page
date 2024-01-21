@@ -74,12 +74,14 @@ useEffect(() => {
 
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = filteredProducts?.slice(startIndex, startIndex + productsPerPage);
+  
+  const mql = window.matchMedia('(max-width: 900px)');
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={3}>
         <Paper elevation={3} sx={{ p: 2 }}>
-          <Accordion>
+          <Accordion defaultExpanded={!mql.matches}>
             <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
               <Typography>Filters</Typography>
             </AccordionSummary>
