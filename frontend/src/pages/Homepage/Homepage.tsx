@@ -10,9 +10,12 @@ import { CatalogContext } from "../../context/CatalogContext";
 export default function Homepage() {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [products, setProducts] = useState<Product[] | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[] | null>(null);
-  const { currentPage, setCurrentPage } = useContext(CatalogContext);
+  const { currentPage, setCurrentPage, products, setProducts, uniqueBrands, uniqueSizes, uniquePrice } =
+    useContext(CatalogContext);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
   const productsPerPage = 6;
 
   const handlePageChange = (page: number) => {
@@ -28,19 +31,29 @@ export default function Homepage() {
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [setProducts]);
+
+  // console.log(uniqueBrands, uniqueSizes, uniquePrice);
 
   useEffect(() => {
     const applyFilters = () => {
-      // if (products) {
-      //   const tempProducts = products.filter((product) => product.brand === "Angular");
-      //   setFilteredProducts(tempProducts);
-      //   setTotalCount(tempProducts.length / productsPerPage);
-      // }
+      if (products) {
+        const tempProducts = products.filter((product) => {
+          return (
+            (selectedBrand ? product.brand === selectedBrand : true) &&
+            (selectedSize ? product.productSize === selectedSize : true) &&
+            (selectedPrice ? product.price === selectedPrice : true)
+          );
+        });
+
+        setFilteredProducts(tempProducts);
+        setTotalCount(tempProducts.length / productsPerPage);
+        setCurrentPage(1);
+      }
     };
 
     applyFilters();
-  }, [products]);
+  }, [products, setCurrentPage, selectedBrand, selectedSize, selectedPrice]);
 
   if (loading) {
     return <LoadingComponent message="Loading Products" />;
