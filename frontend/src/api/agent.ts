@@ -14,8 +14,16 @@ const Users = {
   registerUser: (values: object) => requests.post("users/", values),
 };
 
+const Catalog = {
+  // not used getPaginatedProducts
+  // getPaginatedProducts: (pageNumber: number) => requests.get(`products/?page=${pageNumber}`),
+  getAllProducts: () => requests.get(`products/?page_size=100`),
+  getSingleProduct: (id: string) => requests.get(`products/${id}`),
+};
+
 const agent = {
   Users,
+  Catalog,
 };
 
 export default agent;

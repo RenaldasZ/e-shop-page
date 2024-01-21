@@ -15,7 +15,7 @@ export default function ProductCard({ product }: Props) {
   return (
     <Card
       sx={{
-        height: "100%",
+        height: "95%",
         width: "100%",
         maxWidth: 345,
         border: "3px solid white",
@@ -28,17 +28,23 @@ export default function ProductCard({ product }: Props) {
     >
       <CardMedia
         sx={{
-          height: 140,
+          height: 110,
         }}
         image={product.pictureUrl}
         title={product.name}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+      <CardContent sx={{ m: "auto" }}>
+        <Typography gutterBottom variant="h6" component="div">
           {product.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {product.brand} / {product.type}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Price: {parseFloat(product.price) / 100}€
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Size: {product.productSize}
         </Typography>
       </CardContent>
       <CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
