@@ -65,7 +65,12 @@ export default function Homepage() {
       maxPrice: value as number,
     }));
 
-    setCurrentPage(Math.ceil((filteredProducts?.length ?? 0) / productsPerPage));
+    let pageNumber = 0;
+    if(Math.floor(((filteredProducts?.length ?? 0) / productsPerPage) ) > 1 || filteredProducts?.length === 0) {
+      return setCurrentPage(1);
+    } 
+
+    setCurrentPage(Math.floor((filteredProducts?.length ?? 0) / productsPerPage));
   };
 
   useEffect(() => {
