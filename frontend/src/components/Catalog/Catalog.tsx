@@ -10,7 +10,7 @@ export default function Catalog({ products }: Props) {
   return (
     <Grid
       container
-      spacing={4}
+      spacing={1}
       sx={{
         display: "flex",
         flexWrap: "wrap",
