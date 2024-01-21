@@ -60,7 +60,7 @@ useEffect(() => {
       setFilteredProducts(tempProducts);
       setTotalCount(tempProducts.length / productsPerPage);
 
-      if (Math.floor(tempProducts.length / productsPerPage) === 0) {
+      if (Math.floor((tempProducts.length - 1) / productsPerPage ) == 0) {
         setCurrentPage(1);
       }
     }
