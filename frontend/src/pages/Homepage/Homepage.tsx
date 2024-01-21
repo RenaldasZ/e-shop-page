@@ -1,25 +1,34 @@
-import { Paper, Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Pagination } from "@mui/material";
+import { Paper, Typography, Grid, Accordion, AccordionDetails, AccordionSummary, Pagination, FormControl, FormLabel, FormGroup, Checkbox, FormControlLabel } from "@mui/material";
 import Catalog from "../../components/Catalog/Catalog";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useContext, useEffect, useState } from "react";
 import { Product } from "../../models/product";
 import agent from "../../api/agent";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
-import { CatalogContext } from "../../context/CatalogContext";
+import { CatalogContext, FilterOptions } from "../../context/CatalogContext";
+
 
 export default function Homepage() {
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [filteredProducts, setFilteredProducts] = useState<Product[] | null>(null);
-  const { currentPage, setCurrentPage, products, setProducts, uniqueBrands, uniqueSizes, uniquePrice } =
+  const { currentPage, setCurrentPage, products, setProducts, uniqueBrands, uniqueSizes, uniquePrice, filterOptions, setFilterOptions } =
     useContext(CatalogContext);
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedPrice, setSelectedPrice] = useState(null);
+
   const productsPerPage = 6;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleCheckboxChange =  (category: keyof FilterOptions, value: string) => {
+     setFilterOptions((prevFilterOptions) => ({
+      ...prevFilterOptions,
+      [category]: {
+        ...prevFilterOptions[category],
+        [value]: !prevFilterOptions[category][value],
+      },
+    }));
   };
 
   useEffect(() => {
@@ -35,25 +44,29 @@ export default function Homepage() {
 
   // console.log(uniqueBrands, uniqueSizes, uniquePrice);
 
-  useEffect(() => {
-    const applyFilters = () => {
-      if (products) {
-        const tempProducts = products.filter((product) => {
-          return (
-            (selectedBrand ? product.brand === selectedBrand : true) &&
-            (selectedSize ? product.productSize === selectedSize : true) &&
-            (selectedPrice ? product.price === selectedPrice : true)
-          );
-        });
+useEffect(() => {
+  const applyFilters = () => {
+    if (products) {
+      console.log(filterOptions);
 
-        setFilteredProducts(tempProducts);
-        setTotalCount(tempProducts.length / productsPerPage);
+      const tempProducts = products.filter((product) => {
+        return (
+          (filterOptions.brands[product.brand] || Object.values(filterOptions.brands).every((value) => !value)) &&
+          (filterOptions.sizes[product.productSize] || Object.values(filterOptions.sizes).every((value) => !value)) &&
+          (filterOptions.prices[product.price.toString()] || Object.values(filterOptions.prices).every((value) => !value))
+        );
+      });
+
+      setFilteredProducts(tempProducts);
+      setTotalCount(tempProducts.length / productsPerPage);
+
+      if (Math.floor(tempProducts.length / productsPerPage) === 0) {
         setCurrentPage(1);
       }
-    };
-
-    applyFilters();
-  }, [products, setCurrentPage, selectedBrand, selectedSize, selectedPrice]);
+    }
+  };
+  applyFilters();
+    }, [products, setCurrentPage, filterOptions]);
 
   if (loading) {
     return <LoadingComponent message="Loading Products" />;
@@ -61,17 +74,32 @@ export default function Homepage() {
 
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = filteredProducts?.slice(startIndex, startIndex + productsPerPage);
+  
+  const mql = window.matchMedia('(max-width: 900px)');
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={3}>
         <Paper elevation={3} sx={{ p: 2 }}>
-          <Accordion>
+          <Accordion defaultExpanded={!mql.matches}>
             <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
               <Typography>Filters</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>Filters Will Be Added Here</Typography>
+              <FormControl>
+              <FormLabel>
+                <Typography variant='h6'>Select Brand</Typography>
+                </FormLabel>
+                <FormGroup>
+                  <Grid container>
+                    {uniqueBrands?.map((brand, index) => (
+                      <Grid key={index} md={6} item>
+                        <FormControlLabel control={<Checkbox name={brand} checked={filterOptions.brands[brand]} onChange={() => handleCheckboxChange('brands', brand)} />} label={brand} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </FormGroup>
+              </FormControl>
             </AccordionDetails>
           </Accordion>
         </Paper>

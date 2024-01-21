@@ -15,8 +15,6 @@ const Users = {
 };
 
 const Catalog = {
-  // not used getPaginatedProducts
-  // getPaginatedProducts: (pageNumber: number) => requests.get(`products/?page=${pageNumber}`),
   getAllProducts: () => requests.get(`products/?page_size=100`),
   getSingleProduct: (id: string) => requests.get(`products/${id}`),
 };
