@@ -43,7 +43,7 @@ export default function ProductCard({ product }: Props) {
           {product.brand} / {product.type}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Price: {parseFloat(product.price) / 100}€
+          Price: {product.price / 100}€
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Size: {product.productSize}
