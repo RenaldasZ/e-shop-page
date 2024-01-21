@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from api.rest.serializers import UserSerializer, CustomerSerializer, ProductSerializer
 from api.models import Customer, Product
 from api.rest.paginator import StandardResultsSetPagination
