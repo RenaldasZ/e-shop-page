@@ -11,7 +11,7 @@ const requests = {
 };
 
 const Users = {
-  loginUser: (values: object) => requests.post("login/", values),
+  loginUser: (values: object) => requests.post("login/", values, true),
   registerUser: (values: object) => requests.post("users/", values),
 };
 
