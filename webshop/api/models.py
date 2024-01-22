@@ -1,6 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import uuid
+from typing import Any, Optional
+
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
+from django.db import models
+from rest_framework_simplejwt.tokens import RefreshToken
+
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
 
