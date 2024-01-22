@@ -14,7 +14,9 @@ from pathlib import Path
 from . import local_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+BACKEND_DIR = ROOT_DIR.joinpath('webshop')
+FRONTEND_DIR = ROOT_DIR.joinpath('frontend')
 
 
 # Quick-start development settings - unsuitable for production
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,7 +63,9 @@ ROOT_URLCONF = 'webshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            FRONTEND_DIR.joinpath('html'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +87,7 @@ WSGI_APPLICATION = 'webshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BACKEND_DIR / 'db.sqlite3',
     }
 }
 
@@ -119,14 +124,31 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Security
+# CSRF_COOKIE_SAMESITE = 'Strict'
+# SESSION_COOKIE_SAMESITE = 'Strict'
+# CSRF_COOKIE_HTTPONLY = False
+# SESSION_COOKIE_HTTPONLY = True
+
+INTERNAL_IPS = (
+    '127.0.0.1',
+    '192.168.1.23',
+    'localhost',
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL) 
+STATIC_ROOT = BACKEND_DIR.joinpath('static')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL) 
+MEDIA_ROOT = BACKEND_DIR.joinpath('media')
+
+STATICFILES_DIRS = [
+    FRONTEND_DIR.joinpath('dist'),
+    FRONTEND_DIR.joinpath('public'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
