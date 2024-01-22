@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
-  post: (url: string, body: object) => axios.post(url, body).then(responseBody),
+  get: (url: string, auth = false) => axios.get(url, { withCredentials: auth }).then(responseBody),
+  post: (url: string, body: object, auth = false) =>
+    axios.post(url, body, { withCredentials: auth }).then(responseBody),
 };
 
 const Users = {
