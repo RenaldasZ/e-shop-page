@@ -17,8 +17,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='base.html'), name='react-view'),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
