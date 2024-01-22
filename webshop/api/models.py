@@ -5,8 +5,8 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
 
     class Meta:
-        verbose_name = ""
-        verbose_name_plural = ""
+        verbose_name = "Customer"
+        verbose_name_plural = "Customers"
         db_table_comment = "Question answers"
         pass
 
@@ -21,8 +21,8 @@ class Product(models.Model):
     productSize = models.CharField(max_length=100, default="m")
 
     class Meta:
-        verbose_name = ""
-        verbose_name_plural = ""
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
         db_table_comment = "Question answers"
         pass
 
@@ -32,8 +32,8 @@ class Order(models.Model):
     order_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = ""
-        verbose_name_plural = ""
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
         db_table_comment = "Question answers"
         pass
 
@@ -43,7 +43,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
 
     class Meta:
-        verbose_name = ""
-        verbose_name_plural = ""
+        verbose_name = "OrderItem"
+        verbose_name_plural = "OrderItems"
         db_table_comment = "Question answers"
         pass

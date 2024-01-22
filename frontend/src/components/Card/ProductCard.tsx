@@ -7,6 +7,9 @@ import Typography from "@mui/material/Typography";
 import { Product } from "../../models/product";
 import { Link } from "react-router-dom";
 
+// arba veikia su pythonu arba su npm 
+// const staticFolder: string = '/static/';
+
 interface Props {
   product: Product;
 }
@@ -30,6 +33,7 @@ export default function ProductCard({ product }: Props) {
         sx={{
           height: 110,
         }}
+        // image={staticFolder + product.pictureUrl}
         image={product.pictureUrl}
         title={product.name}
       />
