@@ -20,6 +20,8 @@ import agent from "../../api/agent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { LoadingButton } from "@mui/lab";
 
+const staticFolder: string = "/static";
+
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const [singleProduct, setSingleProduct] = useState<Product | null>(null);
@@ -58,7 +60,11 @@ export default function ProductDetails() {
     <>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6}>
-          <img src={singleProduct?.pictureUrl} alt={singleProduct?.name} style={{ width: "100%" }} />
+          <img
+            src={document.URL.includes("3000") ? singleProduct?.pictureUrl : staticFolder + singleProduct?.pictureUrl}
+            alt={singleProduct?.name}
+            style={{ width: "100%" }}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography mb={2} variant={variant}>
