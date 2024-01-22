@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth import logout
 from api.rest.serializers import LoginSerializer, CurrentUserSerializer
+from api.rest.renderers import UserJSONRenderer
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.request import Request
+
+from django.conf import settings
 from datetime import datetime, timedelta
+
 import jwt
 
 # from webshop.local_settings import SECRET_KEY
@@ -20,38 +25,27 @@ class CurrentUserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class LoginView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
+    serializer_class = LoginSerializer
+    permission_classes = [permissions.AllowAny,]
+    renderer_classes = [UserJSONRenderer,]
+
+    def post(self, request: Request) -> Response:
+        """Return user after login."""
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data['user']
-            # Perform any additional actions or return response as needed
+            user = serializer.validated_data
 
-            payload = {
-                'id': user.id,
-                'username': user.username,
-                'email' : user.email,
-                'exp': datetime.utcnow() + timedelta(hours=24)  # Token expires in 24 hours
-            }
-            jwt_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-            response = Response({
+            response = {
                 'message': 'Login successful',
                 'user_id': user.id,
                 'email': user.email,
                 'username': user.username
-            })
-
-            response.set_cookie(
-                key='e-shop-token',
-                value=jwt_token,
-                httponly=True,
-                expires=datetime.utcnow() + timedelta(hours=24),
-            )
-
-            return response
-        else:
+            }
+        if not serializer.is_valid():
+            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        return Response(response, status=status.HTTP_200_OK)
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

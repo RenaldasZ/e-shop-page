@@ -46,24 +46,32 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
-    def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
+    def get_tokens(self, obj):  # type: ignore
+        """Get user token."""
+        user = User.objects.get(username=obj.username)
 
-        if username and password:
-            user = authenticate(username=username, password=password)
+        return {'refresh': user.tokens['refresh'], 'access': user.tokens['access']}
 
-            if user:
-                if user.is_active:
-                    data['user'] = user
-                else:
-                    raise serializers.ValidationError("User account is not active.")
-            else:
-                raise serializers.ValidationError("Invalid username or password.")
-        else:
-            raise serializers.ValidationError("Must provide both username and password.")
+    def validate(self, data):  # type: ignore
+        """Validate and return user login."""
+        # email = data.get('email', None)
+        username = data.get('username', None)
+        password = data.get('password', None)
+        if username is None:
+            raise serializers.ValidationError('An username address is required to log in.')
 
-        return data
+        if password is None:
+            raise serializers.ValidationError('A password is required to log in.')
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise serializers.ValidationError('A user with this email and password was not found.')
+
+        if not user.is_active:
+            raise serializers.ValidationError('This user is not currently activated.')
+
+        return user
 
 # Database serializers
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):

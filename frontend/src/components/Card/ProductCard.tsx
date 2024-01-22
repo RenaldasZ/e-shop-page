@@ -7,11 +7,8 @@ import Typography from "@mui/material/Typography";
 import { Product } from "../../models/product";
 import { Link } from "react-router-dom";
 
-<<<<<<< HEAD
 // arba veikia su pythonu arba su npm 
 const staticFolder: string = '/static/';
-=======
->>>>>>> upstream/main
 
 interface Props {
   product: Product;
