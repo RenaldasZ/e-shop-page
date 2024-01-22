@@ -2,7 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import { Avatar, Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import agent from "../../api/agent";
+import agent from "../api/agent";
 import { toast } from "react-toastify";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 

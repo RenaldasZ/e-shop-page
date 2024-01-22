@@ -13,13 +13,13 @@ import {
   FormControlLabel,
   Slider,
 } from "@mui/material";
-import Catalog from "../../components/Catalog/Catalog";
+import Catalog from "../components/Catalog/Catalog";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useContext, useEffect, useState } from "react";
-import { Product } from "../../models/product";
-import agent from "../../api/agent";
-import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
-import { CatalogContext, FilterOptions } from "../../context/CatalogContext";
+import { Product } from "../models/product";
+import agent from "../api/agent";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
+import { CatalogContext, FilterOptions } from "../context/CatalogContext";
 
 export default function Homepage() {
   const [loading, setLoading] = useState(true);
@@ -65,10 +65,9 @@ export default function Homepage() {
       maxPrice: value as number,
     }));
 
-    let pageNumber = 0;
-    if(Math.floor(((filteredProducts?.length ?? 0) / productsPerPage) ) > 1 || filteredProducts?.length === 0) {
+    if (Math.floor((filteredProducts?.length ?? 0) / productsPerPage) > 1 || filteredProducts?.length === 0) {
       return setCurrentPage(1);
-    } 
+    }
 
     setCurrentPage(Math.floor((filteredProducts?.length ?? 0) / productsPerPage));
   };
@@ -181,7 +180,10 @@ export default function Homepage() {
                     max={
                       uniquePrice && uniquePrice.length > 0 ? Math.max(...uniquePrice.map((price) => price / 100)) : 0
                     }
-                    onChange={(e: any) => handleSliderChange(e.target.value * 100)}
+                    onChange={(e: any) => {
+                      handleSliderChange(e.target.value * 100);
+                      // console.log(e.target.value);
+                    }}
                   />
                 </FormGroup>
               </FormControl>
@@ -191,7 +193,13 @@ export default function Homepage() {
       </Grid>
       <Grid item xs={12} md={9}>
         <Paper elevation={8} sx={{ p: 2, width: "100%" }}>
-          <Catalog products={currentProducts!} />
+          {currentProducts?.length === 0 ? (
+            <Typography variant="h3" textAlign="center">
+              No Products Found
+            </Typography>
+          ) : (
+            <Catalog products={currentProducts!} />
+          )}
         </Paper>
       </Grid>
       <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end", mb: 5 }}>

@@ -24,7 +24,7 @@ const defaultContextValue: CatalogContextType = {
   filterOptions: {
     brands: {},
     sizes: {},
-    prices: {},
+    maxPrice: 0
   },
   setFilterOptions: () => {},
 };
@@ -38,7 +38,6 @@ interface Props {
 export interface FilterOptions {
   brands: { [key: string]: boolean };
   sizes: { [key: string]: boolean };
-  prices: { [key: string]: boolean };
   maxPrice?: number;
 }
 
@@ -51,7 +50,6 @@ export const CatalogProvider = ({ children }: Props) => {
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     brands: {},
     sizes: {},
-    prices: {},
     maxPrice: 0,
   });
 
