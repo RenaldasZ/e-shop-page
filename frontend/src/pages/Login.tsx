@@ -9,11 +9,11 @@ import { Paper } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
-import agent from "../../api/agent";
+import agent from "../api/agent";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
-import { LoginContext } from "../../context/LoginContext";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
+import { LoginContext } from "../context/LoginContext";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);

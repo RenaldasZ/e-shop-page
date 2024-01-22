@@ -7,14 +7,18 @@ import Typography from "@mui/material/Typography";
 import { Product } from "../../models/product";
 import { Link } from "react-router-dom";
 
+<<<<<<< HEAD
 // arba veikia su pythonu arba su npm 
 const staticFolder: string = '/static/';
+=======
+>>>>>>> upstream/main
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+
   return (
     <Card
       sx={{
@@ -45,7 +49,7 @@ export default function ProductCard({ product }: Props) {
           {product.brand} / {product.type}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Price: {parseFloat(product.price) / 100}€
+          Price: {product.price / 100}€
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Size: {product.productSize}
@@ -53,7 +57,9 @@ export default function ProductCard({ product }: Props) {
       </CardContent>
       <CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
         <Button size="small">Add to Cart</Button>
-        <Button component={Link} to={`/catalog/${product.id}`} size="small">
+        <Button   onClick={() => {
+           
+          }} component={Link} to={`/catalog/${product.id}`} size="small">
           View
         </Button>
       </CardActions>

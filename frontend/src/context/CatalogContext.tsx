@@ -8,7 +8,9 @@ interface CatalogContextType {
   setProducts: Dispatch<SetStateAction<Product[] | null>>;
   uniqueBrands: string[] | null;
   uniqueSizes: string[] | null;
-  uniquePrice: string[] | null;
+  uniquePrice: number[] | null;
+  filterOptions: FilterOptions;
+  setFilterOptions: Dispatch<SetStateAction<FilterOptions>>;
 }
 
 const defaultContextValue: CatalogContextType = {
@@ -19,6 +21,12 @@ const defaultContextValue: CatalogContextType = {
   uniqueBrands: null,
   uniqueSizes: null,
   uniquePrice: null,
+  filterOptions: {
+    brands: {},
+    sizes: {},
+    maxPrice: 0
+  },
+  setFilterOptions: () => {},
 };
 
 export const CatalogContext = createContext<CatalogContextType>(defaultContextValue);
@@ -27,12 +35,23 @@ interface Props {
   children: ReactNode;
 }
 
+export interface FilterOptions {
+  brands: { [key: string]: boolean };
+  sizes: { [key: string]: boolean };
+  maxPrice?: number;
+}
+
 export const CatalogProvider = ({ children }: Props) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [products, setProducts] = useState<Product[] | null>(null);
   const [uniqueBrands, setUniqueBrands] = useState<string[]>([]);
   const [uniqueSizes, setUniqueSizes] = useState<string[]>([]);
-  const [uniquePrice, setUniquePrice] = useState<string[]>([]);
+  const [uniquePrice, setUniquePrice] = useState<number[]>([]);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    brands: {},
+    sizes: {},
+    maxPrice: 0,
+  });
 
   useEffect(() => {
     if (products) {
@@ -45,9 +64,37 @@ export const CatalogProvider = ({ children }: Props) => {
     }
   }, [products]);
 
+  useEffect(() => {
+    if (products) {
+      const brands = Array.from(new Set(products.map((product: Product) => product.brand)));
+      const sizes = Array.from(new Set(products.map((product: Product) => product.productSize)));
+      const storedFilterOptions = JSON.parse(localStorage.getItem("filterOptions") || "{}");
+      setFilterOptions((prevFilterOptions) => ({
+        ...prevFilterOptions,
+        brands: { ...Object.fromEntries(brands.map((brand) => [brand, false])), ...storedFilterOptions.brands },
+        sizes: {...Object.fromEntries(sizes.map((size) => [size, false])), ...storedFilterOptions.sizes},
+        maxPrice: storedFilterOptions.maxPrice,
+      }));
+    }
+  }, [products, setFilterOptions]);
+
+  useEffect(() => {
+    localStorage.setItem("filterOptions", JSON.stringify(filterOptions));
+  }, [filterOptions]);
+
   return (
     <CatalogContext.Provider
-      value={{ currentPage, setCurrentPage, products, setProducts, uniqueBrands, uniqueSizes, uniquePrice }}
+      value={{
+        currentPage,
+        setCurrentPage,
+        products,
+        setProducts,
+        uniqueBrands,
+        uniqueSizes,
+        uniquePrice,
+        filterOptions,
+        setFilterOptions,
+      }}
     >
       {children}
     </CatalogContext.Provider>

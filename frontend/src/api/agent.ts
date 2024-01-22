@@ -5,18 +5,17 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
-  post: (url: string, body: object) => axios.post(url, body).then(responseBody),
+  get: (url: string, auth = false) => axios.get(url, { withCredentials: auth }).then(responseBody),
+  post: (url: string, body: object, auth = false) =>
+    axios.post(url, body, { withCredentials: auth }).then(responseBody),
 };
 
 const Users = {
-  loginUser: (values: object) => requests.post("login/", values),
+  loginUser: (values: object) => requests.post("login/", values, true),
   registerUser: (values: object) => requests.post("users/", values),
 };
 
 const Catalog = {
-  // not used getPaginatedProducts
-  // getPaginatedProducts: (pageNumber: number) => requests.get(`products/?page=${pageNumber}`),
   getAllProducts: () => requests.get(`products/?page_size=100`),
   getSingleProduct: (id: string) => requests.get(`products/${id}`),
 };

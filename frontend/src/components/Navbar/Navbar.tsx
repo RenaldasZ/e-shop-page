@@ -44,11 +44,15 @@ export default function Navbar({ handleThemeChange }: Props) {
   const pages =
     userId === null
       ? [
-          { title: "Home", path: "/" },
+          { title: "Catalog", path: "/" },
+          { title: "About Us", path: "/about-us" },
           { title: "Login", path: "/Login" },
           { title: "Register", path: "/Register" },
         ]
-      : [{ title: "Home", path: "/" }];
+      : [
+          { title: "Catalog", path: "/" },
+          { title: "About Us", path: "/about-us" },
+        ];
 
   const settings = [
     { title: "Profile" },
