@@ -1,28 +1,18 @@
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.request import Request
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from rest_framework_simplejwt.views import TokenObtainPairView
-from api.rest.serializers import MyTokenObtainPairSerializer 
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialConnectView
+from dj_rest_auth.social_serializers import TwitterConnectSerializer
 
-# Create your views here.
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-    
-    def post(self, request: Request, *args, **kwargs) -> Response:
-        serializer = self.get_serializer(data=request.data)
+class FacebookConnect(SocialConnectView):
+    adapter_class = FacebookOAuth2Adapter
 
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
+class TwitterConnect(SocialConnectView):
+    serializer_class = TwitterConnectSerializer
+    adapter_class = TwitterOAuthAdapter
 
-        response = {
-                'refresh': serializer.validated_data['refresh'],
-                'access': serializer.validated_data['access'],
-                'message': 'Login successful',
-                'user_id': serializer.validated_data['id'],
-                'email': serializer.validated_data['email'],
-                'username': serializer.validated_data['username'],
-            }
-        return Response(response, status=status.HTTP_200_OK)
+class GithubConnect(SocialConnectView):
+    adapter_class = GitHubOAuth2Adapter
+    callback_url = 'CALLBACK_URL_YOU_SET_ON_GITHUB'
+    client_class = OAuth2Client
