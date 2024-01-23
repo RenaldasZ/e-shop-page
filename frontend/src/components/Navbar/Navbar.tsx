@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../../context/LoginContext";
 import { toast } from "react-toastify";
 import { ShoppingCart } from "@mui/icons-material";
+import { BasketContext } from "../../context/BasketContext";
 
 interface Props {
   handleThemeChange: () => void;
@@ -29,9 +30,22 @@ interface Props {
 export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const { darkMode, userName } = useContext(LoginContext);
-  const { userId, setUserId } = useContext(LoginContext);
+  const { darkMode, userName, userId, setUserId } = useContext(LoginContext);
+  const { basket, count, setCount } = useContext(BasketContext);
+
   const navigation = useNavigate();
+
+  console.log("basket", basket);
+
+  useEffect(() => {
+    if (basket) {
+      const basketCount = Object.keys(basket).reduce(function (previous, key: any) {
+        return previous + basket[key].selectedQuantity;
+      }, 0);
+
+      setCount(basketCount);
+    }
+  }, [basket, setCount]);
 
   const handleLogout = () => {
     localStorage.removeItem("userId-eshop");
@@ -166,7 +180,7 @@ export default function Navbar({ handleThemeChange }: Props) {
           </Box>
 
           <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent="-1" color="secondary">
+            <Badge badgeContent={count} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

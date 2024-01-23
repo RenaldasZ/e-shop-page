@@ -13,12 +13,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Product } from "../../models/product";
 import agent from "../../api/agent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { LoadingButton } from "@mui/lab";
+import { CatalogContext } from "../../context/CatalogContext";
+import { BasketContext } from "../../context/BasketContext";
 
 const staticFolder: string = "/static";
 
@@ -27,6 +29,14 @@ export default function ProductDetails() {
   const [singleProduct, setSingleProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
+  // const { products } = useContext(CatalogContext);
+  // const { basket, setBasket } = useContext(BasketContext);
+
+  // console.log(products);
+
+  // const addProductToBasket = () => {
+  //   if (products.id)
+  // };
 
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -53,8 +63,6 @@ export default function ProductDetails() {
   if (loading) {
     return <LoadingComponent message="Loading Selected Product" />;
   }
-
-  console.log(singleProduct);
 
   return (
     <>
