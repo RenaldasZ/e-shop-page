@@ -188,7 +188,7 @@ export default function ProductDetails() {
             <Grid xs={12} item></Grid>
             <Grid xs={12} item textAlign="end">
               <LoadingButton
-                disabled={buttonDisableFlag || quantity == singleProduct?.quantityInStock!}
+                disabled={buttonDisableFlag || quantity == (singleProduct?.quantityInStock! + 1) }
                 sx={{ mt: 1, width: "100%" }}
                 variant="contained"
                 color="success"
