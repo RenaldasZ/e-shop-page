@@ -48,6 +48,8 @@ export default function ProductDetails() {
     agent.Catalog.getSingleProduct(id!)
       .then((response) => {
         if (isMounted) {
+
+          
           setSingleProduct(response);
           let initialAvailableQuantity = response.quantityInStock;
           const basketItem = basket?.find((item) => item.id === parseInt(id!));
@@ -73,17 +75,21 @@ export default function ProductDetails() {
     };
   }, [id, basket]);
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (parseInt(event.currentTarget.value) >= 0) {
       setQuantity(parseInt(event.currentTarget.value));
     }
-    if (parseInt(event.currentTarget.value) > availableQuantity) {
+  };
+
+  useEffect(() => {
+    if (quantity >= 0) {
+      setButtonDisableFlag(false);
+    } else {
       setButtonDisableFlag(true);
       toast.error("More Quantity Not Available");
-    } else {
-      setButtonDisableFlag(false);
     }
-  }
+  }, [quantity, availableQuantity]);
+
 
   const handleAddToCart = () => {
     const existingItemIndex = basket?.findIndex((item) => item.id === parseInt(id!));
@@ -107,10 +113,10 @@ export default function ProductDetails() {
     setBasket(updatedBasket);
     localStorage.setItem("basket", JSON.stringify(updatedBasket));
 
-    const totalQuantityInBasket = updatedBasket.find((item) => item.id === parseInt(id!))?.selectedQuantity || 0;
-    if (singleProduct?.quantityInStock !== undefined) {
-      setAvailableQuantity(singleProduct?.quantityInStock - totalQuantityInBasket);
-    }
+    // const totalQuantityInBasket = updatedBasket.find((item) => item.id === parseInt(id!))?.selectedQuantity || 0;
+    // if (singleProduct?.quantityInStock !== undefined) {
+    //   setAvailableQuantity(singleProduct?.quantityInStock);
+    // }
   };
 
   if (loading) {
@@ -176,13 +182,13 @@ export default function ProductDetails() {
                 label="Quantity in Cart"
                 fullWidth
                 value={quantity}
-                InputProps={{ inputProps: { min: 0, max: availableQuantity } }}
+                InputProps={{ inputProps: { min: 0, max: singleProduct?.quantityInStock } }}
               />
             </Grid>
             <Grid xs={12} item></Grid>
             <Grid xs={12} item textAlign="end">
               <LoadingButton
-                disabled={buttonDisableFlag || availableQuantity === 0}
+                disabled={buttonDisableFlag || quantity == singleProduct?.quantityInStock!}
                 sx={{ mt: 1, width: "100%" }}
                 variant="contained"
                 color="success"
