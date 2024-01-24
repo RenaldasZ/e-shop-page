@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # 'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -201,7 +201,7 @@ REST_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
     'JWT_AUTH_REFRESH_COOKIE_PATH': '/',
     'JWT_AUTH_SECURE': False,
-    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_SAMESITE': 'Lax',
     'JWT_AUTH_COOKIE_DOMAIN' : None,
     'JWT_AUTH_RETURN_EXPIRATION': False,
@@ -274,4 +274,37 @@ REST_FRAMEWORK = {
         # 'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],    
+}
+
+
+
+
+# ALLAUTH settings
+AUTHENTICATION_METHOD = "username"
+EMAIL_VERIFICATION = False
+LOGIN_ATTEMPTS_LIMIT = 10
+REAUTHENTICATION_REQUIRED = False
+LOGOUT_ON_PASSWORD_CHANGE = True
+LOGOUT_REDIRECT_URL = '/'
+SIGNUP_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+USERNAME_BLACKLIST = []
+USERNAME_MIN_LENGTH = 3
+EMAIL_SUBJECT_PREFIX = None
+RATE_LIMITS = {
+    # Change password view (for users already logged in)
+    "change_password": "5/m",
+    # Email management (e.g. add, remove, change primary)
+    "manage_email": "10/m",
+    # Request a password reset, global rate limit per IP
+    "reset_password": "20/m",
+    # Rate limit measured per individual email address
+    "reset_password_email": "5/m",
+    # Reauthentication for users already logged in)
+    "reauthenticate": "10/m",
+    # Password reset (the view the password reset email links to).
+    "reset_password_from_key": "20/m",
+    # Signups.
+    "signup": "20/m",
+    # NOTE: Login is already protected via `ACCOUNT_LOGIN_ATTEMPTS_LIMIT`
 }
