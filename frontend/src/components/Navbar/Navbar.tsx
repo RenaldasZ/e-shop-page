@@ -35,8 +35,6 @@ export default function Navbar({ handleThemeChange }: Props) {
 
   const navigation = useNavigate();
 
-  console.log("basket", basket);
-
   useEffect(() => {
     if (basket) {
       const basketCount = Object.keys(basket).reduce(function (previous, key: any) {
@@ -49,6 +47,7 @@ export default function Navbar({ handleThemeChange }: Props) {
 
   const handleLogout = () => {
     localStorage.removeItem("userId-eshop");
+    localStorage.removeItem("username-eshop");
     setUserId(null);
     setAnchorElUser(null);
     toast.success("You Have Succesfully Logged Out");
