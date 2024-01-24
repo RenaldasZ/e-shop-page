@@ -19,8 +19,8 @@ import { Product } from "../../models/product";
 import agent from "../../api/agent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { LoadingButton } from "@mui/lab";
-import { CatalogContext } from "../../context/CatalogContext";
 import { BasketContext } from "../../context/BasketContext";
+import { toast } from "react-toastify";
 
 const staticFolder: string = "/static";
 
@@ -29,14 +29,10 @@ export default function ProductDetails() {
   const [singleProduct, setSingleProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
-  // const { products } = useContext(CatalogContext);
-  // const { basket, setBasket } = useContext(BasketContext);
-
-  // console.log(products);
-
-  // const addProductToBasket = () => {
-  //   if (products.id)
-  // };
+  const [availableQuantity, setAvailableQuantity] = useState(0);
+  const [buttonDisableFlag, setButtonDisableFlag] = useState(false);
+  const [isInBasket, setIsInBasket] = useState(false);
+  const { basket, setBasket } = useContext(BasketContext);
 
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -48,17 +44,74 @@ export default function ProductDetails() {
   variant = xs ? "h6" : sm ? "h4" : "h3";
 
   useEffect(() => {
+    let isMounted = true;
     agent.Catalog.getSingleProduct(id!)
-      .then((response) => setSingleProduct(response))
+      .then((response) => {
+        if (isMounted) {
+          setSingleProduct(response);
+          let initialAvailableQuantity = response.quantityInStock;
+          const basketItem = basket?.find((item) => item.id === parseInt(id!));
+          if (basketItem) {
+            setIsInBasket(true);
+            setQuantity(basketItem.selectedQuantity);
+            initialAvailableQuantity -= basketItem.selectedQuantity;
+          } else {
+            setIsInBasket(false);
+          }
+
+          setAvailableQuantity(initialAvailableQuantity);
+        }
+      })
       .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, [id]);
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [id, basket]);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     if (parseInt(event.currentTarget.value) >= 0) {
       setQuantity(parseInt(event.currentTarget.value));
     }
+    if (parseInt(event.currentTarget.value) > availableQuantity) {
+      setButtonDisableFlag(true);
+      toast.error("More Quantity Not Available");
+    } else {
+      setButtonDisableFlag(false);
+    }
   }
+
+  const handleAddToCart = () => {
+    const existingItemIndex = basket?.findIndex((item) => item.id === parseInt(id!));
+    let updatedBasket;
+
+    if (existingItemIndex !== -1 && existingItemIndex !== undefined && basket) {
+      const updatedItem = {
+        ...basket[existingItemIndex],
+        selectedQuantity: quantity,
+      };
+      updatedBasket = [...basket.slice(0, existingItemIndex), updatedItem, ...basket.slice(existingItemIndex + 1)];
+    } else {
+      const newItem = {
+        id: parseInt(id!),
+        selectedQuantity: quantity,
+      };
+
+      updatedBasket = basket ? [...basket, newItem] : [newItem];
+    }
+
+    setBasket(updatedBasket);
+    localStorage.setItem("basket", JSON.stringify(updatedBasket));
+
+    const totalQuantityInBasket = updatedBasket.find((item) => item.id === parseInt(id!))?.selectedQuantity || 0;
+    if (singleProduct?.quantityInStock !== undefined) {
+      setAvailableQuantity(singleProduct?.quantityInStock - totalQuantityInBasket);
+    }
+  };
 
   if (loading) {
     return <LoadingComponent message="Loading Selected Product" />;
@@ -107,7 +160,7 @@ export default function ProductDetails() {
 
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold" }}>Quanity in Stock</TableCell>
-                  <TableCell>{singleProduct?.quantityInStock}</TableCell>
+                  <TableCell>{availableQuantity}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -123,12 +176,19 @@ export default function ProductDetails() {
                 label="Quantity in Cart"
                 fullWidth
                 value={quantity}
+                InputProps={{ inputProps: { min: 0, max: availableQuantity } }}
               />
             </Grid>
             <Grid xs={12} item></Grid>
             <Grid xs={12} item textAlign="end">
-              <LoadingButton sx={{ mt: 1, width: "100%" }} variant="contained" color="success">
-                Add To Cart
+              <LoadingButton
+                disabled={buttonDisableFlag || availableQuantity === 0}
+                sx={{ mt: 1, width: "100%" }}
+                variant="contained"
+                color="success"
+                onClick={handleAddToCart}
+              >
+                {isInBasket ? "Update Cart" : "Add to Cart"}
               </LoadingButton>
               <Button
                 sx={{ mb: 2, mt: 1, width: "100%" }}
