@@ -23,6 +23,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if request.user.is_staff:
             queryset = queryset = self.filter_queryset(self.get_queryset())
+        if not request.user.is_authenticated:
+            return Response({"message": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             queryset = User.objects.filter(id=request.user.id)
 
