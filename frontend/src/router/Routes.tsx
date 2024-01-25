@@ -7,6 +7,7 @@ import NotFound from "../pages/NotFound";
 import LoggedInAuth from "./LoggedInAuth";
 import ProductDetails from "../components/Catalog/ProductDetails";
 import AboutUs from "../pages/AboutUs";
+import IsAuth from "./IsAuth";
 
 export const router = createBrowserRouter([
   {
@@ -20,8 +21,11 @@ export const router = createBrowserRouter([
           { path: "Register", element: <Register /> },
         ],
       },
+      {
+        element: <IsAuth />,
+        children: [{ path: "about-us", element: <AboutUs /> }],
+      },
       { path: "", element: <Homepage /> },
-      {path: "about-us", element: <AboutUs />},
       { path: "catalog/:id", element: <ProductDetails /> },
       { path: "not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },

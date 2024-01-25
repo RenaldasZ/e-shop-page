@@ -1,5 +1,11 @@
-import { Typography } from "@mui/material";
+import { Container, Paper, Typography } from "@mui/material";
 
 export default function AboutUs() {
-  return <Typography>This is About Us Page</Typography>;
+  return (
+    <Container component={Paper} elevation={3} sx={{ p: 2 }}>
+      <Typography textAlign="center" variant="h3">
+        This is About Us Page
+      </Typography>
+    </Container>
+  );
 }
