@@ -32,8 +32,6 @@ export default function Login() {
     setIsLoading(true);
     agent.Users.loginUser(data)
       .then((response) => {
-        console.log(response);
-
         localStorage.setItem("username-eshop", response.user.username);
         setUserName(response.user.username);
         setLoggedUser(response);
