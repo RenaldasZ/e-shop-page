@@ -17,7 +17,7 @@ const Users = {
 
 const Catalog = {
   getAllProducts: () => requests.get(`products/?page_size=100`),
-  getSingleProduct: (id: string) => requests.get(`products/${id}`),
+  getSingleProduct: (id: string) => requests.get(`products/${id}/`),
 };
 
 const agent = {
