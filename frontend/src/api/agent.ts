@@ -6,13 +6,18 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
   get: (url: string, auth = false) => axios.get(url, { withCredentials: auth }).then(responseBody),
-  post: (url: string, body: object, auth = false) =>
+  post: (url: string, body: object = {}, auth = false) =>
     axios.post(url, body, { withCredentials: auth }).then(responseBody),
 };
 
 const Users = {
-  loginUser: (values: object) => requests.post("login/", values, true),
+  loginUser: (values: object) => requests.post("auth/login/", values, true),
   registerUser: (values: object) => requests.post("users/", values),
+  logoutUser: () => requests.post("auth/logout/", {}, true),
+};
+
+const Token = {
+  refreshToken: () => requests.post("/auth/token/refresh/", {}, true),
 };
 
 const Catalog = {
@@ -23,6 +28,7 @@ const Catalog = {
 const agent = {
   Users,
   Catalog,
+  Token,
 };
 
 export default agent;
