@@ -112,11 +112,6 @@ export default function ProductDetails() {
 
     setBasket(updatedBasket);
     localStorage.setItem("basket", JSON.stringify(updatedBasket));
-
-    // const totalQuantityInBasket = updatedBasket.find((item) => item.id === parseInt(id!))?.selectedQuantity || 0;
-    // if (singleProduct?.quantityInStock !== undefined) {
-    //   setAvailableQuantity(singleProduct?.quantityInStock);
-    // }
   };
 
   if (loading) {
