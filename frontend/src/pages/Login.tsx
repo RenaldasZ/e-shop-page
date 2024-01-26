@@ -33,13 +33,13 @@ export default function Login() {
     agent.Users.loginUser(data)
       .then((response) => {
 
-        
-        localStorage.setItem("username-eshop", response.username);
-        setUserName(response.username);
+        localStorage.setItem("username-eshop", response.user.username);
+        setUserName(response.user.username);
+
         setLoggedUser(response);
-        localStorage.setItem("userId-eshop", response.user_id);
-        setUserId(response.user_id);
-        toast.success(response.message);
+        localStorage.setItem("userId-eshop", response.user.pk);
+        setUserId(response.user.pk);
+        toast.success(response.message || "Login Successful");
         navigation("/");
       })
       .catch((error) => {

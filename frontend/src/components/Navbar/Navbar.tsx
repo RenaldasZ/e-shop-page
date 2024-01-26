@@ -21,6 +21,7 @@ import { LoginContext } from "../../context/LoginContext";
 import { toast } from "react-toastify";
 import { ShoppingCart } from "@mui/icons-material";
 import { BasketContext } from "../../context/BasketContext";
+import agent from "../../api/agent";
 
 interface Props {
   handleThemeChange: () => void;
@@ -46,12 +47,16 @@ export default function Navbar({ handleThemeChange }: Props) {
   }, [basket, setCount]);
 
   const handleLogout = () => {
-    localStorage.removeItem("userId-eshop");
-    localStorage.removeItem("username-eshop");
-    setUserId(null);
-    setAnchorElUser(null);
-    toast.success("You Have Succesfully Logged Out");
-    navigation("/");
+    agent.Users.logoutUser()
+      .then(() => {
+        localStorage.removeItem("userId-eshop");
+        localStorage.removeItem("username-eshop");
+        setUserId(null);
+        setAnchorElUser(null);
+        toast.success("You Have Succesfully Logged Out");
+        navigation("/");
+      })
+      .catch((error) => console.log(error));
   };
 
   const pages =
@@ -179,7 +184,7 @@ export default function Navbar({ handleThemeChange }: Props) {
           </Box>
 
           <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent={count} color="secondary">
+            <Badge component={Link} to="/checkout" badgeContent={count} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

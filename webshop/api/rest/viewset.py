@@ -1,6 +1,5 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from django.contrib.auth.models import User
 from api.rest.serializers import UserSerializer, CustomerSerializer, ProductSerializer
 from api.models import Customer, Product
@@ -24,6 +23,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if request.user.is_staff:
             queryset = queryset = self.filter_queryset(self.get_queryset())
+        if not request.user.is_authenticated:
+            return Response({"message": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             queryset = User.objects.filter(id=request.user.id)
 
