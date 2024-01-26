@@ -10,7 +10,6 @@ export default function IsAuth() {
   const [loading, setLoading] = useState(true);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const { setUserId } = useContext(LoginContext);
-
   const location = useLocation();
 
   useEffect(() => {
@@ -25,7 +24,9 @@ export default function IsAuth() {
   useEffect(() => {
     const handleLogout = async () => {
       if (result === 401) {
-        toast.error("Not Allowed");
+        const isCheckoutPage = location.pathname.includes("/checkout");
+        const message = isCheckoutPage ? "Please log in" : "Not Allowed";
+        toast.error(message);
         try {
           await agent.Users.logoutUser();
           localStorage.removeItem("username-eshop");
@@ -39,7 +40,7 @@ export default function IsAuth() {
     };
 
     handleLogout();
-  }, [result, setUserId]);
+  }, [result, setUserId, location.pathname]);
 
   if (loading) return <LoadingComponent message="Checking Identity" />;
 

@@ -184,7 +184,7 @@ export default function Navbar({ handleThemeChange }: Props) {
           </Box>
 
           <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent={count} color="secondary">
+            <Badge component={Link} to="/checkout" badgeContent={count} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>
