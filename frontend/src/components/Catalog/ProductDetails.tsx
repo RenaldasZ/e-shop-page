@@ -48,8 +48,6 @@ export default function ProductDetails() {
     agent.Catalog.getSingleProduct(id!)
       .then((response) => {
         if (isMounted) {
-
-          
           setSingleProduct(response);
           let initialAvailableQuantity = response.quantityInStock;
           const basketItem = basket?.find((item) => item.id === parseInt(id!));
@@ -89,7 +87,6 @@ export default function ProductDetails() {
       toast.error("More Quantity Not Available");
     }
   }, [quantity, availableQuantity]);
-
 
   const handleAddToCart = () => {
     const existingItemIndex = basket?.findIndex((item) => item.id === parseInt(id!));
@@ -188,7 +185,7 @@ export default function ProductDetails() {
             <Grid xs={12} item></Grid>
             <Grid xs={12} item textAlign="end">
               <LoadingButton
-                disabled={buttonDisableFlag || quantity == (singleProduct?.quantityInStock! + 1) }
+                disabled={buttonDisableFlag || quantity == (singleProduct?.quantityInStock ?? 0) + 1}
                 sx={{ mt: 1, width: "100%" }}
                 variant="contained"
                 color="success"

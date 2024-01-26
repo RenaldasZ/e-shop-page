@@ -8,6 +8,7 @@ import LoggedInAuth from "./LoggedInAuth";
 import ProductDetails from "../components/Catalog/ProductDetails";
 import AboutUs from "../pages/AboutUs";
 import IsAuth from "./IsAuth";
+import Checkout from "../pages/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,10 @@ export const router = createBrowserRouter([
       },
       {
         element: <IsAuth />,
-        children: [{ path: "about-us", element: <AboutUs /> }],
+        children: [
+          { path: "about-us", element: <AboutUs /> },
+          { path: "checkout", element: <Checkout /> },
+        ],
       },
       { path: "", element: <Homepage /> },
       { path: "catalog/:id", element: <ProductDetails /> },
