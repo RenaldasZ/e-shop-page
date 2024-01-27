@@ -6,7 +6,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Paper } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import agent from "../api/agent";
@@ -21,6 +21,9 @@ export default function Login() {
   const { setUserId, userId, setUserName } = useContext(LoginContext);
 
   const navigation = useNavigate();
+  const location = useLocation();
+  const state = location.state as { from: Location; redirectTo: string } | null;
+  const redirectTo = state?.redirectTo || "/";
 
   const {
     register,
@@ -33,12 +36,12 @@ export default function Login() {
     agent.Users.loginUser(data)
       .then((response) => {
         localStorage.setItem("username-eshop", response.user.username);
+        localStorage.setItem("userId-eshop", response.user.pk);
         setUserName(response.user.username);
         setLoggedUser(response);
-        localStorage.setItem("userId-eshop", response.user.pk);
         setUserId(response.user.pk);
         toast.success(response.message || "Login Successful");
-        navigation("/");
+        navigation(redirectTo, { replace: true });
       })
       .catch((error) => {
         toast.error(error.response.data.non_field_errors[0]);
@@ -76,6 +79,7 @@ export default function Login() {
           {...register("username", { required: "Username is required" })}
           error={!!errors.username}
           helperText={errors?.username?.message as string}
+          autoComplete="current-username"
         />
         <TextField
           margin="normal"
@@ -85,6 +89,7 @@ export default function Login() {
           {...register("password", { required: "Password is required" })}
           error={!!errors.password}
           helperText={errors?.password?.message as string}
+          autoComplete="current-password"
         />
         <LoadingButton
           disabled={!isValid || loggedUser != null}
