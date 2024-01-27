@@ -112,6 +112,7 @@ export default function Register() {
           })}
           error={!!errors.password}
           helperText={errors?.password?.message as string}
+          autoComplete="current-newPassword"
         />
         <TextField
           margin="normal"
@@ -124,6 +125,7 @@ export default function Register() {
           })}
           error={!!errors.confirmPassword}
           helperText={errors?.confirmPassword?.message as string}
+          autoComplete="current-confirmPassword"
         />
         <LoadingButton
           disabled={!isValid}

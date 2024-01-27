@@ -9,6 +9,7 @@ export default function IsAuth() {
   const [result, setResult] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [redirectState, setRedirectState] = useState({ from: { pathname: "/" }, redirectTo: "/defaultPathAfterLogin" });
   const { setUserId } = useContext(LoginContext);
   const location = useLocation();
 
@@ -27,6 +28,13 @@ export default function IsAuth() {
         const isCheckoutPage = location.pathname.includes("/checkout");
         const message = isCheckoutPage ? "Please log in" : "Not Allowed";
         toast.error(message);
+
+        const redirectState = {
+          from: location,
+          redirectTo: isCheckoutPage ? "/checkout" : "/",
+        };
+        setRedirectState(redirectState);
+        setRedirectToLogin(true);
         try {
           await agent.Users.logoutUser();
           localStorage.removeItem("username-eshop");
@@ -40,12 +48,12 @@ export default function IsAuth() {
     };
 
     handleLogout();
-  }, [result, setUserId, location.pathname]);
+  }, [result, setUserId, location.pathname, location]);
 
   if (loading) return <LoadingComponent message="Checking Identity" />;
 
   if (redirectToLogin) {
-    return <Navigate to="/login" state={{ from: location }} />;
+    return <Navigate to="/login" state={redirectState} replace />;
   }
 
   return <Outlet />;
