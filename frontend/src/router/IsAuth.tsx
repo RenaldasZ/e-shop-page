@@ -14,12 +14,17 @@ export default function IsAuth() {
 
   useEffect(() => {
     agent.Users.getUserInfo()
-      .then((response) => setResult(response.status))
+      .then((response) => {
+        setResult(response.status);
+      })
       .catch((error) => {
-        setResult(error.response.status);
+        Promise.reject(error);
+        setResult(error.response?.status || 500);
+        
       })
       .finally(() => setLoading(false));
   }, []);
+  
 
   useEffect(() => {
     const handleLogout = async () => {
