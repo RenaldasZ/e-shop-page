@@ -35,9 +35,11 @@ export default function Login() {
     setIsLoading(true);
     agent.Users.loginUser(data)
       .then((response) => {
+
         localStorage.setItem("username-eshop", response.user.username);
         localStorage.setItem("userId-eshop", response.user.pk);
         setUserName(response.user.username);
+
         setLoggedUser(response);
         setUserId(response.user.pk);
         toast.success(response.message || "Login Successful");
