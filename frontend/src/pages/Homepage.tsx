@@ -34,7 +34,7 @@ export default function Homepage() {
     setTotalCount,
   } = useContext(CatalogContext);
 
-  const productsPerPage = 6;
+  const productsPerPage = parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
