@@ -4,6 +4,7 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+
 axios.interceptors.response.use(
   function successfulResponse(response) {
     return response;
@@ -20,9 +21,16 @@ axios.interceptors.response.use(
 
       try {
         const newTokenResponse = await Token.refreshToken();
-        axios.defaults.headers.common["Authorization"] = `Bearer ${newTokenResponse.access}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newTokenResponse.access}`;
-
+        console.log("New Token Response:", newTokenResponse);
+      
+        // Remove old Authorization header
+        delete originalRequest.headers["Authorization"];
+      
+        // Set the new Authorization header directly in the original request
+        originalRequest.headers.Authorization = `Bearer ${newTokenResponse.access}`;
+      
+        console.log("Refreshed Request Headers:", originalRequest.headers);
+      
         return axios(originalRequest);
       } catch (refreshError) {
         return Promise.reject(refreshError);
