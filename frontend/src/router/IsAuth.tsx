@@ -18,14 +18,13 @@ export default function IsAuth() {
       .then((response) => {
         setResult(response.status);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         Promise.reject(error);
+        console.error(error);
         setResult(error.response?.status || 500);
-        
       })
       .finally(() => setLoading(false));
   }, []);
-  
 
   useEffect(() => {
     const handleLogout = async () => {
@@ -33,7 +32,6 @@ export default function IsAuth() {
         const isCheckoutPage = location.pathname.includes("/checkout");
         const message = isCheckoutPage ? "Please log in" : "Not Allowed";
         toast.error(message);
-
         const redirectState = {
           from: location,
           redirectTo: isCheckoutPage ? "/checkout" : "/",
@@ -47,6 +45,7 @@ export default function IsAuth() {
           setUserId(null);
         } catch (error: any) {
           toast.error(error);
+          console.error(error);
         }
         setRedirectToLogin(true);
       }

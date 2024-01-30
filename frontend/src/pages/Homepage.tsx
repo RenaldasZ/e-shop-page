@@ -15,26 +15,23 @@ import {
 } from "@mui/material";
 import Catalog from "../components/Catalog/Catalog";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { useContext, useEffect, useState } from "react";
-import { Product } from "../models/product";
-import agent from "../api/agent";
-import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
+import { useContext, useEffect } from "react";
 import { CatalogContext, FilterOptions } from "../context/CatalogContext";
 
 export default function Homepage() {
-  const [loading, setLoading] = useState(true);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [filteredProducts, setFilteredProducts] = useState<Product[] | null>(null);
   const {
     currentPage,
     setCurrentPage,
     products,
-    setProducts,
     uniqueBrands,
     uniqueSizes,
     uniquePrice,
     filterOptions,
     setFilterOptions,
+    totalCount,
+    filteredProducts,
+    setFilteredProducts,
+    setTotalCount,
   } = useContext(CatalogContext);
 
   const productsPerPage = 6;
@@ -73,17 +70,6 @@ export default function Homepage() {
   };
 
   useEffect(() => {
-    agent.Catalog.getAllProducts()
-      .then((response) => {
-        setProducts(response.results);
-        setFilteredProducts(response.results);
-        setTotalCount(response.results.length / productsPerPage);
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, [setProducts]);
-
-  useEffect(() => {
     const applyFilters = () => {
       if (products) {
         const tempProducts = products.filter((product) => {
@@ -105,11 +91,7 @@ export default function Homepage() {
       }
     };
     applyFilters();
-  }, [products, setCurrentPage, filterOptions]);
-
-  if (loading) {
-    return <LoadingComponent message="Loading Products" />;
-  }
+  }, [products, setCurrentPage, filterOptions, setFilteredProducts, setTotalCount]);
 
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = filteredProducts?.slice(startIndex, startIndex + productsPerPage);

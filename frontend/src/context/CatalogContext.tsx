@@ -11,6 +11,12 @@ interface CatalogContextType {
   uniquePrice: number[] | null;
   filterOptions: FilterOptions;
   setFilterOptions: Dispatch<SetStateAction<FilterOptions>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  filteredProducts: Product[] | null;
+  setFilteredProducts: Dispatch<SetStateAction<Product[] | null>>;
+  totalCount: number;
+  setTotalCount: Dispatch<SetStateAction<number>>;
 }
 
 const defaultContextValue: CatalogContextType = {
@@ -24,9 +30,15 @@ const defaultContextValue: CatalogContextType = {
   filterOptions: {
     brands: {},
     sizes: {},
-    maxPrice: 0
+    maxPrice: 0,
   },
   setFilterOptions: () => {},
+  loading: true,
+  setLoading: () => {},
+  filteredProducts: null,
+  setFilteredProducts: () => {},
+  totalCount: 0,
+  setTotalCount: () => {},
 };
 
 export const CatalogContext = createContext<CatalogContextType>(defaultContextValue);
@@ -47,6 +59,9 @@ export const CatalogProvider = ({ children }: Props) => {
   const [uniqueBrands, setUniqueBrands] = useState<string[]>([]);
   const [uniqueSizes, setUniqueSizes] = useState<string[]>([]);
   const [uniquePrice, setUniquePrice] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<Product[] | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     brands: {},
     sizes: {},
@@ -72,7 +87,7 @@ export const CatalogProvider = ({ children }: Props) => {
       setFilterOptions((prevFilterOptions) => ({
         ...prevFilterOptions,
         brands: { ...Object.fromEntries(brands.map((brand) => [brand, false])), ...storedFilterOptions.brands },
-        sizes: {...Object.fromEntries(sizes.map((size) => [size, false])), ...storedFilterOptions.sizes},
+        sizes: { ...Object.fromEntries(sizes.map((size) => [size, false])), ...storedFilterOptions.sizes },
         maxPrice: storedFilterOptions.maxPrice,
       }));
     }
@@ -94,6 +109,12 @@ export const CatalogProvider = ({ children }: Props) => {
         uniquePrice,
         filterOptions,
         setFilterOptions,
+        loading,
+        setLoading,
+        filteredProducts,
+        setFilteredProducts,
+        totalCount,
+        setTotalCount,
       }}
     >
       {children}
