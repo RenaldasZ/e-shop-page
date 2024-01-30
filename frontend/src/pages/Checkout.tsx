@@ -14,7 +14,9 @@ import { useContext } from "react";
 import { BasketContext } from "../context/BasketContext";
 import { CatalogContext } from "../context/CatalogContext";
 import calculateSubtotal from "../utils/calculateSubtotal";
-import { Remove, Add } from "@mui/icons-material";
+import { Remove, Add, Delete } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 
 export default function Checkout() {
   const { basket, setBasket } = useContext(BasketContext);
@@ -31,8 +33,12 @@ export default function Checkout() {
       const newBasket = [...prevBasket];
       const item = newBasket[index];
 
-      if (item && item.selectedQuantity > 0) {
-        item.selectedQuantity -= 1;
+      if (item) {
+        if (item.selectedQuantity > 1) {
+          item.selectedQuantity -= 1;
+        } else {
+          newBasket.splice(index, 1);
+        }
       }
 
       return newBasket;
@@ -61,6 +67,13 @@ export default function Checkout() {
 
     localStorage.setItem("basket", JSON.stringify(basket));
   };
+
+  const totalPrice =
+    result?.reduce((total, item, index) => {
+      const price = item?.price || 0;
+      const quantity = basket![index].selectedQuantity || 0;
+      return total + calculateSubtotal(price, quantity);
+    }, 0) || 0;
 
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
@@ -104,6 +117,9 @@ export default function Checkout() {
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Subtotal €
               </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
+                Delete
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -129,12 +145,30 @@ export default function Checkout() {
 
                   <TableCell align="center">{r?.productSize}</TableCell>
                   <TableCell align="center">{calculateSubtotal(price, quantity)}</TableCell>
+                  <TableCell align="right">
+                    <LoadingButton color="error">
+                      <Delete />
+                    </LoadingButton>
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ width: "75%", mt: 2 }} display="flex" justifyContent="flex-end">
+        <Typography fontWeight="bolder" component={Paper} sx={{ p: 2, alignSelf: "end" }}>
+          Total: {totalPrice}€
+        </Typography>
+      </Box>
+      <Box sx={{ width: "75%", mt: 4, gap: 3 }} display="flex" justifyContent="flex-end">
+        <Button component={Link} to="/" variant="contained">
+          Back To Catalog
+        </Button>
+        <Button color="success" variant="contained">
+          Checkout
+        </Button>
+      </Box>
     </Box>
   );
 }

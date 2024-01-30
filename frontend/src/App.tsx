@@ -18,7 +18,7 @@ function App() {
   );
   const { loading, setLoading, setProducts, setFilteredProducts, setTotalCount } = useContext(CatalogContext);
 
-  const productsPerPage = 6;
+  const productsPerPage = parseInt(import.meta.env.VITE_PRODUCTS_PER_PAGE);
 
   useEffect(() => {
     agent.Catalog.getAllProducts()
@@ -29,7 +29,7 @@ function App() {
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }, [setProducts, setFilteredProducts, setTotalCount, setLoading]);
+  }, [setProducts, setFilteredProducts, setTotalCount, setLoading, productsPerPage]);
 
   const theme = createTheme({
     palette: {
