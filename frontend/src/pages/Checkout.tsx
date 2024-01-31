@@ -10,21 +10,44 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BasketContext } from "../context/BasketContext";
 import { CatalogContext } from "../context/CatalogContext";
 import calculateSubtotal from "../utils/calculateSubtotal";
 import { Remove, Add, Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import { Basket } from "../models/basket";
+
+const staticFolder: string = "/static";
 
 export default function Checkout() {
   const { basket, setBasket } = useContext(BasketContext);
   const { products } = useContext(CatalogContext);
-
-  const result = basket
+  // const [result, setResult] = useState(() => {
+  //   basket
+  //   ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
+  //   .filter((obj) => obj !== undefined);
+  // });
+  let result;
+  useEffect(() => {
+    result = basket
     ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
     .filter((obj) => obj !== undefined);
+  },[basket])
+
+
+
+
+    const handleDeleteProduct = (index: number) => {
+  
+      if (basket) {
+          basket.splice(index, 1);
+          setBasket(basket)
+          localStorage.setItem("basket", JSON.stringify(basket));
+      }
+
+    }
 
   const handleRemoveQuantity = (index: number) => {
     setBasket((prevBasket) => {
@@ -111,11 +134,16 @@ export default function Checkout() {
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Quantity
               </TableCell>
+
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Size
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Subtotal €
+              </TableCell>
+
+              <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
+                Product Image
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Delete
@@ -133,20 +161,28 @@ export default function Checkout() {
                   </TableCell>
                   <TableCell align="center">{r?.brand}</TableCell>
                   <TableCell align="center">{r?.type}</TableCell>
-                  <TableCell align="center">
-                    <Button color="error" onClick={() => handleRemoveQuantity(index)}>
+                  <TableCell align="center" sx={{p:0}}>
+                    <Box display="flex">                    
+                      <Button color="error" onClick={() => handleRemoveQuantity(index)}>
                       <Remove />
                     </Button>
-                    {quantity}
+                    <span style={{display: "flex", alignItems: "center"}}>{quantity}</span>
                     <Button onClick={() => handleAddQuantity(r?.id ?? null, index)}>
                       <Add />
                     </Button>
+                    </Box>
                   </TableCell>
-
                   <TableCell align="center">{r?.productSize}</TableCell>
                   <TableCell align="center">{calculateSubtotal(price, quantity)}</TableCell>
-                  <TableCell align="right">
-                    <LoadingButton color="error">
+
+                  <TableCell align="center" sx={{p:0}}>          
+                  <img
+                  src={document.URL.includes("3000") ? r?.pictureUrl : staticFolder + r?.pictureUrl}
+                  alt={r?.name}
+                  style={{ width: "60%" }}
+          /></TableCell>
+                            <TableCell sx={{p:0}} align="right">
+                    <LoadingButton onClick={() => handleDeleteProduct(index)} color="error">
                       <Delete />
                     </LoadingButton>
                   </TableCell>
@@ -158,7 +194,7 @@ export default function Checkout() {
       </TableContainer>
       <Box sx={{ width: "75%", mt: 2 }} display="flex" justifyContent="flex-end">
         <Typography fontWeight="bolder" component={Paper} sx={{ p: 2, alignSelf: "end" }}>
-          Total: {totalPrice}€
+          Total: {totalPrice.toFixed(2)}€
         </Typography>
       </Box>
       <Box sx={{ width: "75%", mt: 4, gap: 3 }} display="flex" justifyContent="flex-end">
