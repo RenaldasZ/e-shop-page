@@ -29,13 +29,10 @@ export default function Checkout() {
   //   ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
   //   .filter((obj) => obj !== undefined);
   // });
-  let result;
-  useEffect(() => {
-    result = basket
+
+  const result = basket
     ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
     .filter((obj) => obj !== undefined);
-  },[basket])
-
 
 
 
