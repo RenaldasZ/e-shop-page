@@ -31,7 +31,7 @@ export const BasketProvider = ({ children }: Props) => {
       const basketItems = JSON.parse(storedBasket);
       setBasket(basketItems);
     }
-  }, []);
+  }, [setBasket]);
 
   useEffect(() => {
     if (basket) {
