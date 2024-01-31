@@ -10,26 +10,19 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { BasketContext } from "../context/BasketContext";
 import { CatalogContext } from "../context/CatalogContext";
 import calculateSubtotal from "../utils/calculateSubtotal";
 import { Remove, Add, Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import { Basket } from "../models/basket";
 
 const staticFolder: string = "/static";
 
 export default function Checkout() {
   const { basket, setBasket } = useContext(BasketContext);
   const { products } = useContext(CatalogContext);
-  // const [result, setResult] = useState(() => {
-  //   basket
-  //   ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
-  //   .filter((obj) => obj !== undefined);
-  // });
-
   const result = basket
     ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
     .filter((obj) => obj !== undefined);
