@@ -72,12 +72,7 @@ export default function Navbar({ handleThemeChange }: Props) {
           { title: "About Us", path: "/about-us" },
         ];
 
-  const settings = [
-    { title: "Profile" },
-    { title: "Account" },
-    { title: "Dashboard" },
-    { title: "Logout", action: handleLogout },
-  ];
+  const settings = [{ title: "Profile" }, { title: "My Orders" }, { title: "Logout", action: handleLogout }];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
