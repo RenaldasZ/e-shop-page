@@ -54,6 +54,7 @@ export default function Checkout() {
       const newBasket = [...prevBasket];
       const item = newBasket[index];
       let totalQuantity;
+
       if (products && id != null) {
         totalQuantity = products[id].quantityInStock ?? 0;
       }
@@ -165,7 +166,7 @@ export default function Checkout() {
         <Button component={Link} to="/" variant="contained">
           Back To Catalog
         </Button>
-        <Button color="success" variant="contained">
+        <Button color="success" variant="contained" onClick={() => console.log(basket)}>
           Checkout
         </Button>
       </Box>
