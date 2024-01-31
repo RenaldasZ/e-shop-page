@@ -34,13 +34,18 @@ export default function Checkout() {
     ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
     .filter((obj) => obj !== undefined);
 
-
-
     const handleDeleteProduct = (index: number) => {
   
       if (basket) {
-          basket.splice(index, 1);
-          setBasket(basket)
+          setBasket((prevBasket) => {
+            if (!prevBasket) return prevBasket;
+
+            const newBasket = [...prevBasket];
+
+            newBasket.splice(index, 1);
+
+            return newBasket;
+          })
           localStorage.setItem("basket", JSON.stringify(basket));
       }
 
