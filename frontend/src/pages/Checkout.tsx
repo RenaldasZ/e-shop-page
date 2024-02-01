@@ -10,41 +10,59 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { BasketContext } from "../context/BasketContext";
 import { CatalogContext } from "../context/CatalogContext";
 import calculateSubtotal from "../utils/calculateSubtotal";
 import { Remove, Add, Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import Modal from "../components/Modal/Modal";
+import ModalContent from "../components/Modal/ModalContent";
 
 const staticFolder: string = "/static";
 
 export default function Checkout() {
   const { basket, setBasket } = useContext(BasketContext);
   const { products } = useContext(CatalogContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState<number>(0);
+
   const result = basket
     ?.map((obj1) => products?.find((obj2) => obj2.id === obj1.id))
     .filter((obj) => obj !== undefined);
 
-    const handleDeleteProduct = (index: number) => {
-  
-      if (basket) {
-          setBasket((prevBasket) => {
-            if (!prevBasket) return prevBasket;
+  const handleSaveProduct = (index: number) => {
+    setBasket((prevBasket) => {
+      if (!prevBasket) return prevBasket;
 
-            const newBasket = [...prevBasket];
+      const newBasket = [...prevBasket];
+      const item = newBasket[index];
 
-            newBasket.splice(index, 1);
-
-            return newBasket;
-          })
-          localStorage.setItem("basket", JSON.stringify(basket));
+      if (item) {
+        item.selectedQuantity + 1;
       }
 
-    }
+      return newBasket;
+    });
+  };
 
-  const handleRemoveQuantity = (index: number) => {
+  const handleDeleteProduct = (index: number) => {
+    if (basket) {
+      setBasket((prevBasket) => {
+        if (!prevBasket) return prevBasket;
+
+        const newBasket = [...prevBasket];
+
+        newBasket.splice(index, 1);
+
+        return newBasket;
+      });
+      localStorage.setItem("basket", JSON.stringify(basket));
+    }
+  };
+
+  const handleRemoveQuantity = (index: number, quantity: number) => {
     setBasket((prevBasket) => {
       if (!prevBasket) return prevBasket;
 
@@ -54,9 +72,12 @@ export default function Checkout() {
       if (item) {
         if (item.selectedQuantity > 1) {
           item.selectedQuantity -= 1;
-        } else {
-          newBasket.splice(index, 1);
         }
+      }
+
+      if (quantity - 1 === 0) {
+        setModalIndex(index);
+        setIsModalOpen(true);
       }
 
       return newBasket;
@@ -135,9 +156,8 @@ export default function Checkout() {
                 Size
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
-                Subtotal €
+                Subtotal
               </TableCell>
-
               <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                 Product Image
               </TableCell>
@@ -157,28 +177,36 @@ export default function Checkout() {
                   </TableCell>
                   <TableCell align="center">{r?.brand}</TableCell>
                   <TableCell align="center">{r?.type}</TableCell>
-                  <TableCell align="center" sx={{p:0}}>
-                    <Box display="flex">                    
-                      <Button color="error" onClick={() => handleRemoveQuantity(index)}>
-                      <Remove />
-                    </Button>
-                    <span style={{display: "flex", alignItems: "center"}}>{quantity}</span>
-                    <Button onClick={() => handleAddQuantity(r?.id ?? null, index)}>
-                      <Add />
-                    </Button>
+                  <TableCell align="center" sx={{ p: 0 }}>
+                    <Box display="flex">
+                      <Button color="error" onClick={() => handleRemoveQuantity(index, quantity)}>
+                        <Remove />
+                      </Button>
+                      <span style={{ display: "flex", alignItems: "center" }}>{quantity}</span>
+                      <Button onClick={() => handleAddQuantity(r?.id ?? null, index)}>
+                        <Add />
+                      </Button>
                     </Box>
                   </TableCell>
                   <TableCell align="center">{r?.productSize}</TableCell>
-                  <TableCell align="center">{calculateSubtotal(price, quantity)}</TableCell>
+                  <TableCell align="center">{calculateSubtotal(price, quantity)} €</TableCell>
 
-                  <TableCell align="center" sx={{p:0}}>          
-                  <img
-                  src={document.URL.includes("3000") ? r?.pictureUrl : staticFolder + r?.pictureUrl}
-                  alt={r?.name}
-                  style={{ width: "60%" }}
-          /></TableCell>
-                            <TableCell sx={{p:0}} align="right">
-                    <LoadingButton onClick={() => handleDeleteProduct(index)} color="error">
+                  <TableCell align="center" sx={{ p: 0 }}>
+                    <img
+                      src={document.URL.includes("3000") ? r?.pictureUrl : staticFolder + r?.pictureUrl}
+                      alt={r?.name}
+                      style={{ width: "60%" }}
+                    />
+                  </TableCell>
+                  <TableCell sx={{ p: 0 }} align="right">
+                    <LoadingButton
+                      sx={{ mr: 2 }}
+                      onClick={() => {
+                        setIsModalOpen(true);
+                        setModalIndex(index);
+                      }}
+                      color="error"
+                    >
                       <Delete />
                     </LoadingButton>
                   </TableCell>
@@ -201,6 +229,18 @@ export default function Checkout() {
           Checkout
         </Button>
       </Box>
+      {isModalOpen && (
+        <>
+          <Modal closeModal={() => setIsModalOpen(false)}>
+            <ModalContent
+              handleSaveProduct={handleSaveProduct}
+              index={modalIndex}
+              handleDeleteProduct={handleDeleteProduct}
+              setIsModalOpen={setIsModalOpen}
+            />
+          </Modal>
+        </>
+      )}
     </Box>
   );
 }
