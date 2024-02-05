@@ -14,6 +14,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
+import { GoogleLogin, useGoogleLogin  } from '@react-oauth/google';
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -105,6 +106,16 @@ export default function Login() {
         </LoadingButton>
         <Grid container>
           <Grid item>
+          
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              useGoogleLogin
+              }}
+            />;
             <Link to="/Register">{"Don't have an account? Sign Up"}</Link>
           </Grid>
         </Grid>
