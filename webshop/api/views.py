@@ -29,7 +29,7 @@ class GithubConnect(SocialConnectView):
 
 class GoogleConnect(SocialConnectView):
     adapter_class = GoogleOAuth2Adapter
-    callback_url = 'http://127.0.0.1:8000/api/auth/google/callback/'
+    callback_url = "postmessage"
     client_class = OAuth2Client
     permission_classes = (permissions.AllowAny,)
 

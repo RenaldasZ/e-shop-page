@@ -16,6 +16,7 @@ import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
+import axios from "axios";
 import { Button } from "@mui/base";
 
 export default function Login() {
@@ -72,8 +73,21 @@ export default function Login() {
 
   const handleGoogleLoginSuccess = useGoogleLogin({
     flow: 'auth-code',
-    onSuccess: tokenResponse => console.log(tokenResponse.code)
-  });
+    onSuccess: async (codeResponse) => {
+      console.log(codeResponse);
+      //const decodedString = encodeURIComponent(codeResponse.code);
+      const tokens = await axios.post(
+          'http://localhost:8000/api/auth/google/connect/', {
+              code: codeResponse.code
+          
+              //access_token: codeResponse.access_token,
+              //id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImJkYzRlMTA5ODE1ZjQ2OTQ2MGU2M2QzNGNkNjg0MjE1MTQ4ZDdiNTkiLCJ0eXAiOiJKV1QifQ"
+          });
+
+      console.log(tokens);
+  },
+  onError: errorResponse => console.log(errorResponse),
+});
 
 
   const handleGoogleLoginError = () => {
@@ -133,11 +147,7 @@ export default function Login() {
         >
           {userId === null ? "Sing In" : "You Already Logged In"}
         </LoadingButton>
-        <Button onClick={() => handleGoogleLoginSuccess()}
-        // onSuccess={handleGoogleLoginSuccess}
-        // onError={handleGoogleLoginError}
-        // Additional props if needed
-        />
+        <Button onClick={() => handleGoogleLoginSuccess()}> Sign in with Google</Button>
         <Grid container>
           <Grid item>
             <Link to="/Register">{"Don't have an account? Sign Up"}</Link>
