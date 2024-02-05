@@ -14,8 +14,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
+import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
 import { Button } from "@mui/base";
 
@@ -75,7 +74,6 @@ export default function Login() {
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
       console.log(codeResponse);
-      //const decodedString = encodeURIComponent(codeResponse.code);
       const tokens = await axios.post(
           'http://localhost:8000/api/auth/google/connect/', {
               code: codeResponse.code
