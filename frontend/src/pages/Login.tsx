@@ -14,7 +14,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { Button } from "@mui/base";
 
@@ -45,7 +45,6 @@ export default function Login() {
 
       setLoggedUser(response);
       setUserId(response.user.pk);
-      await agent.Token.retrieveToken();
       toast.success(response.message || "Login Successful");
       navigation(redirectTo, { replace: true });
     } catch (error: any) {
@@ -55,43 +54,21 @@ export default function Login() {
     }
   };
 
-  // const handleGoogleLoginSuccess = (credentialResponse: any) => {
-  //   console.log(credentialResponse);
-
-  //   const decodedToken = jwtDecode(credentialResponse.credential);
-  
-  //   toast.success("Login Successful");
-  
-  //   localStorage.setItem("username-eshop", decodedToken.email);
-  //   localStorage.setItem("userId-eshop", decodedToken.sub);
-  //   setUserId(decodedToken.sub);
-  //   setUserName(decodedToken.name);
-  
-  //   navigation(redirectTo, { replace: true });
-  // };
-
   const handleGoogleLoginSuccess = useGoogleLogin({
-    flow: 'auth-code',
+    flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      console.log(codeResponse);
-      const tokens = await axios.post(
-          'http://localhost:8000/api/auth/google/connect/', {
-              code: codeResponse.code
-          
-              //access_token: codeResponse.access_token,
-              //id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImJkYzRlMTA5ODE1ZjQ2OTQ2MGU2M2QzNGNkNjg0MjE1MTQ4ZDdiNTkiLCJ0eXAiOiJKV1QifQ"
-          });
+      const tokens = await axios.post("http://localhost:8000/api/auth/google/connect/", {
+        code: codeResponse.code,
+      });
 
-      console.log(tokens);
-  },
-  onError: errorResponse => console.log(errorResponse),
-});
-
-
-  const handleGoogleLoginError = () => {
-    console.log('Google Login Failed');
-    // Handle the Google login error logic here
-  };
+      setUserName(tokens.data.user.email);
+      setUserId(tokens.data.user.pk);
+      localStorage.setItem("username-eshop", tokens.data.user.email);
+      localStorage.setItem("userId-eshop", tokens.data.user.pk);
+      navigation("/");
+    },
+    onError: (errorResponse) => console.log(errorResponse),
+  });
 
   if (isLoading) {
     return <LoadingComponent message="Logging In" />;
@@ -155,4 +132,3 @@ export default function Login() {
     </Container>
   );
 }
-
