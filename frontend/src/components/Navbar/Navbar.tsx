@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { ShoppingCart } from "@mui/icons-material";
 import { BasketContext } from "../../context/BasketContext";
 import agent from "../../api/agent";
+import { googleLogout } from '@react-oauth/google';
 
 interface Props {
   handleThemeChange: () => void;
@@ -33,6 +34,7 @@ export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const { darkMode, userName, userId, setUserId } = useContext(LoginContext);
   const { basket, count, setCount } = useContext(BasketContext);
+
 
   const navigation = useNavigate();
 
@@ -53,6 +55,7 @@ export default function Navbar({ handleThemeChange }: Props) {
         localStorage.removeItem("username-eshop");
         setUserId(null);
         setAnchorElUser(null);
+        googleLogout();
         toast.success("You Have Succesfully Logged Out");
         navigation("/");
       })

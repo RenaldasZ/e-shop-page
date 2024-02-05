@@ -14,7 +14,9 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
-import { GoogleLogin, useGoogleLogin  } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import { Button } from "@mui/base";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,25 +34,52 @@ export default function Login() {
     formState: { isSubmitting, errors, isValid },
   } = useForm({ mode: "onTouched" });
 
-  function submitForm(data: FieldValues) {
+  const submitForm = async (data: FieldValues) => {
     setIsLoading(true);
-    agent.Users.loginUser(data)
-      .then((response) => {
+    try {
+      const response = await agent.Users.loginUser(data);
 
-        localStorage.setItem("username-eshop", response.user.username);
-        localStorage.setItem("userId-eshop", response.user.pk);
-        setUserName(response.user.username);
+      localStorage.setItem("username-eshop", response.user.username);
+      localStorage.setItem("userId-eshop", response.user.pk);
+      setUserName(response.user.username);
 
-        setLoggedUser(response);
-        setUserId(response.user.pk);
-        toast.success(response.message || "Login Successful");
-        navigation(redirectTo, { replace: true });
-      })
-      .catch((error) => {
-        toast.error(error.response.data.non_field_errors[0]);
-      })
-      .finally(() => setIsLoading(false));
-  }
+      setLoggedUser(response);
+      setUserId(response.user.pk);
+      await agent.Token.retrieveToken();
+      toast.success(response.message || "Login Successful");
+      navigation(redirectTo, { replace: true });
+    } catch (error: any) {
+      toast.error(error.response?.data?.non_field_errors[0] || "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // const handleGoogleLoginSuccess = (credentialResponse: any) => {
+  //   console.log(credentialResponse);
+
+  //   const decodedToken = jwtDecode(credentialResponse.credential);
+  
+  //   toast.success("Login Successful");
+  
+  //   localStorage.setItem("username-eshop", decodedToken.email);
+  //   localStorage.setItem("userId-eshop", decodedToken.sub);
+  //   setUserId(decodedToken.sub);
+  //   setUserName(decodedToken.name);
+  
+  //   navigation(redirectTo, { replace: true });
+  // };
+
+  const handleGoogleLoginSuccess = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: tokenResponse => console.log(tokenResponse.code)
+  });
+
+
+  const handleGoogleLoginError = () => {
+    console.log('Google Login Failed');
+    // Handle the Google login error logic here
+  };
 
   if (isLoading) {
     return <LoadingComponent message="Logging In" />;
@@ -104,18 +133,13 @@ export default function Login() {
         >
           {userId === null ? "Sing In" : "You Already Logged In"}
         </LoadingButton>
+        <Button onClick={() => handleGoogleLoginSuccess()}
+        // onSuccess={handleGoogleLoginSuccess}
+        // onError={handleGoogleLoginError}
+        // Additional props if needed
+        />
         <Grid container>
           <Grid item>
-          
-            <GoogleLogin
-              onSuccess={credentialResponse => {
-                console.log(credentialResponse);
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              useGoogleLogin
-              }}
-            />;
             <Link to="/Register">{"Don't have an account? Sign Up"}</Link>
           </Grid>
         </Grid>
@@ -123,3 +147,4 @@ export default function Login() {
     </Container>
   );
 }
+
