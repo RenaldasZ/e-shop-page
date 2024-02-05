@@ -46,6 +46,7 @@ const Users = {
 
 const Token = {
   refreshToken: () => requests.post("/auth/token/refresh/", {}, true),
+  retrieveToken: () => requests.post("/auth/token/retrieve/",{}, true)
 };
 
 const Catalog = {
