@@ -19,8 +19,6 @@ export default function IsAuth() {
         setResult(response.status);
       })
       .catch((error: any) => {
-        Promise.reject(error);
-        console.error(error);
         setResult(error.response?.status || 500);
       })
       .finally(() => setLoading(false));
@@ -45,7 +43,6 @@ export default function IsAuth() {
           setUserId(null);
         } catch (error: any) {
           toast.error(error);
-          console.error(error);
         }
         setRedirectToLogin(true);
       }
