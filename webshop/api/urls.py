@@ -4,6 +4,7 @@ from api.views import (
     FacebookConnect, 
     TwitterConnect,
     GithubConnect,
+    GoogleConnect,
     LoginView
 )
 
@@ -22,9 +23,10 @@ urlpatterns = [
     # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
     # path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('auth/facebook/connect/', FacebookConnect.as_view(), name='fb_connect'),
-    path('auth/twitter/connect/', TwitterConnect.as_view(), name='twitter_connect'),
-    path('auth/github/connect/', GithubConnect.as_view(), name='github_connect'),
+    # path('auth/facebook/connect/', FacebookConnect.as_view(), name='fb_connect'),
+    # path('auth/twitter/connect/', TwitterConnect.as_view(), name='twitter_connect'),
+    # path('auth/github/connect/', GithubConnect.as_view(), name='github_connect'),
+    path('auth/google/connect/', GoogleConnect.as_view(), name='google_connect'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
