@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Button, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
@@ -60,13 +60,20 @@ export default function Login() {
         code: codeResponse.code,
       });
 
-      setUserName(tokens.data.user.email);
+      console.log(codeResponse);
+      console.log(tokens.data.user.first_name);
+
+      setUserName(tokens.data.user.first_name);
+
       setUserId(tokens.data.user.pk);
-      localStorage.setItem("username-eshop", tokens.data.user.email);
+      localStorage.setItem("username-eshop", tokens.data.user.first_name);
       localStorage.setItem("userId-eshop", tokens.data.user.pk);
+      toast.success("Login Successful");
       navigation("/");
     },
-    onError: (errorResponse) => console.log(errorResponse),
+    onError: async (errorResponse) => {
+      console.log("error", errorResponse);
+    },
   });
 
   if (isLoading) {
