@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import { ShoppingCart } from "@mui/icons-material";
 import { BasketContext } from "../../context/BasketContext";
 import agent from "../../api/agent";
-import { googleLogout } from '@react-oauth/google';
+import { googleLogout } from "@react-oauth/google";
 
 interface Props {
   handleThemeChange: () => void;
@@ -34,7 +34,6 @@ export default function Navbar({ handleThemeChange }: Props) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const { darkMode, userName, userId, setUserId } = useContext(LoginContext);
   const { basket, count, setCount } = useContext(BasketContext);
-
 
   const navigation = useNavigate();
 
@@ -205,7 +204,7 @@ export default function Navbar({ handleThemeChange }: Props) {
           </Box>
 
           {userId != null && (
-            <Box sx={{ flexGrow: 0 }}>
+            <Box>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={`${userName}`.toUpperCase()} src="/static/images/avatar/2.jpg" />
@@ -216,7 +215,7 @@ export default function Navbar({ handleThemeChange }: Props) {
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "top",
-                  horizontal: "right",
+                  horizontal: "left",
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}

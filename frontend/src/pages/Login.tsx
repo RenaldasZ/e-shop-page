@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
@@ -14,9 +14,8 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
-import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { Button } from "@mui/base";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -122,7 +121,9 @@ export default function Login() {
         >
           {userId === null ? "Sing In" : "You Already Logged In"}
         </LoadingButton>
-        <Button onClick={() => handleGoogleLoginSuccess()}> Sign in with Google</Button>
+        <Box display="flex" justifyContent="center" sx={{ mb: 2, mt: 1, width: "100%" }}>
+          <GoogleLogin onSuccess={handleGoogleLoginSuccess} size="large" shape="pill" />
+        </Box>
         <Grid container>
           <Grid item>
             <Link to="/Register">{"Don't have an account? Sign Up"}</Link>

@@ -91,7 +91,7 @@ export default function Homepage() {
       }
     };
     applyFilters();
-  }, [products, setCurrentPage, filterOptions, setFilteredProducts, setTotalCount]);
+  }, [products, setCurrentPage, filterOptions, setFilteredProducts, setTotalCount, productsPerPage]);
 
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = filteredProducts?.slice(startIndex, startIndex + productsPerPage);
