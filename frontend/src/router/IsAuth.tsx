@@ -19,14 +19,14 @@ export default function IsAuth() {
         setResult(response.status);
       })
       .catch((error: any) => {
-        setResult(error.response?.status || 500);
+        setResult(error.request?.status || 500);
       })
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     const handleLogout = async () => {
-      if (result === 401) {
+      if (result === 403) {
         const isCheckoutPage = location.pathname.includes("/checkout");
         const message = isCheckoutPage ? "Please log in" : "Not Allowed";
         toast.error(message);
