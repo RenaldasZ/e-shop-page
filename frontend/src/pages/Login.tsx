@@ -38,16 +38,19 @@ export default function Login() {
     try {
       const response = await agent.Users.loginUser(data);
 
-      localStorage.setItem("username-eshop", response.user.username);
+      console.log(response);
+
+      localStorage.setItem("username-eshop", response.user.first_name);
       localStorage.setItem("userId-eshop", response.user.pk);
-      setUserName(response.user.username);
+      setUserName(response.user.first_name);
 
       setLoggedUser(response);
       setUserId(response.user.pk);
       toast.success(response.message || "Login Successful");
       navigation(redirectTo, { replace: true });
     } catch (error: any) {
-      toast.error(error.response?.data?.non_field_errors[0] || "An error occurred");
+      if (error.response.data.email) toast.error(error.response.data.email[0]);
+      if (error.response.data.non_field_errors) toast.error(error.response.data.non_field_errors[0]);
     } finally {
       setIsLoading(false);
     }
@@ -60,12 +63,9 @@ export default function Login() {
         code: codeResponse.code,
       });
 
-      console.log(codeResponse);
-      console.log(tokens.data.user.first_name);
-      console.log(tokens.data.user.user_has_usable_password);
+      console.log("tokens", tokens);
 
       setUserName(tokens.data.user.first_name);
-
       setUserId(tokens.data.user.pk);
       localStorage.setItem("username-eshop", tokens.data.user.first_name);
       localStorage.setItem("userId-eshop", tokens.data.user.pk);
