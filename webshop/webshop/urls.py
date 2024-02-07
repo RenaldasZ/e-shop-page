@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('accounts/', include('allauth.urls')),
-    path('', TemplateView.as_view(template_name='base.html'), name='react-view'),
+    re_path(r'', TemplateView.as_view(template_name='base.html'), name='react-view'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

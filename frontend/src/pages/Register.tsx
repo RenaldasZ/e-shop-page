@@ -9,8 +9,10 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 interface IFormInput {
   username: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  first_name: string;
+  last_name: string;
+  password1: string;
+  password2: string;
 }
 
 export default function Register() {
@@ -24,7 +26,7 @@ export default function Register() {
   const navigation = useNavigate();
 
   const validatePassword = (value: string) => {
-    if (value === watch("password")) {
+    if (value === watch("password1")) {
       return true;
     }
     return "The passwords do not match";
@@ -32,13 +34,15 @@ export default function Register() {
 
   function registerForm(data: IFormInput) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword, ...regData } = data;
-    agent.Users.registerUser(regData)
+    //const { password2, ...regData } = data;
+    console.log(data);
+    agent.Users.registerUser(data)
       .then(() => {
         toast.success("Registration Successful");
         navigation("/Login");
       })
       .catch((error) => {
+        
         const errorDetails = error.response.data;
         const errorMessages = [];
 
@@ -97,9 +101,25 @@ export default function Register() {
         <TextField
           margin="normal"
           fullWidth
+          label="First name"
+          {...register("first_name", { required: "First name is Required" })}
+          error={!!errors.first_name}
+          helperText={errors?.first_name?.message as string}
+        />
+        <TextField
+          margin="normal"
+          fullWidth
+          label="Last name"
+          {...register("last_name", { required: "Last name is Required" })}
+          error={!!errors.last_name}
+          helperText={errors?.last_name?.message as string}
+        />
+        <TextField
+          margin="normal"
+          fullWidth
           label="Password"
           type="password"
-          {...register("password", {
+          {...register("password1", {
             required: "Password is required",
             minLength: {
               value: 8,
@@ -110,8 +130,8 @@ export default function Register() {
               message: "Password does not meet complexity requirements",
             },
           })}
-          error={!!errors.password}
-          helperText={errors?.password?.message as string}
+          error={!!errors.password1}
+          helperText={errors?.password1?.message as string}
           autoComplete="current-newPassword"
         />
         <TextField
@@ -119,12 +139,12 @@ export default function Register() {
           fullWidth
           label="Confirm Password"
           type="password"
-          {...register("confirmPassword", {
+          {...register("password2", {
             required: "Please confirm your password",
             validate: validatePassword,
           })}
-          error={!!errors.confirmPassword}
-          helperText={errors?.confirmPassword?.message as string}
+          error={!!errors.password2}
+          helperText={errors?.password2?.message as string}
           autoComplete="current-confirmPassword"
         />
         <LoadingButton
