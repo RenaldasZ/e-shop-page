@@ -62,6 +62,7 @@ export default function Login() {
 
       console.log(codeResponse);
       console.log(tokens.data.user.first_name);
+      console.log(tokens.data.user.user_has_usable_password);
 
       setUserName(tokens.data.user.first_name);
 
@@ -102,11 +103,11 @@ export default function Login() {
         <TextField
           margin="normal"
           fullWidth
-          label="Username"
-          {...register("username", { required: "Username is required" })}
-          error={!!errors.username}
-          helperText={errors?.username?.message as string}
-          autoComplete="current-username"
+          label="Email"
+          {...register("email", { required: "email is required" })}
+          error={!!errors.email}
+          helperText={errors?.email?.message as string}
+          autoComplete="current-email"
         />
         <TextField
           margin="normal"
