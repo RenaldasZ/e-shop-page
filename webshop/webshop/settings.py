@@ -30,7 +30,7 @@ SECRET_KEY = local_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,7 +68,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'api.middleware.APILocalhostOnlyMiddleware',
+    # 'api.middleware.APILocalhostOnlyMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,6 +86,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             FRONTEND_DIR.joinpath('html'),
+            BACKEND_DIR.joinpath('static')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -107,12 +108,24 @@ WSGI_APPLICATION = 'webshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+sqlite3 = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BACKEND_DIR / 'db.sqlite3',
     }
 }
+postgres = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': local_settings.POSTGRES_HOST,
+        'NAME': local_settings.POSTGRES_DB,
+        'USER': local_settings.POSTGRES_USER,
+        'PASSWORD': local_settings.POSTGRES_PASSWORD,
+        'PORT': local_settings.POSTGRES_PORT,
+    }
+}
+# DATABASES = sqlite3 if DEBUG else postgres
+DATABASES = postgres
 
 
 # Password validation
@@ -266,8 +279,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
@@ -293,6 +309,8 @@ EMAIL_USE_TLS = local_settings.EMAIL_USE_TLS
 
 # ALLAUTH settings
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = False
 LOGIN_ATTEMPTS_LIMIT = 10
@@ -350,6 +368,3 @@ AUTHENTICATION_BACKENDS = (
 
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
-
-
-USERS_WO_PWD = set()
