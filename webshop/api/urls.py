@@ -3,7 +3,7 @@ from api.rest.router import router
 from api.views import (
     GoogleConnect,
     LoginView,
-    RegisterView
+    RegisterView,
 )
 
 from dj_rest_auth.registration.views import (
@@ -16,7 +16,7 @@ from dj_rest_auth.views import (
     PasswordResetConfirmView,
     LogoutView,
     UserDetailsView,
-    PasswordChangeView
+    PasswordChangeView,
 )
 
 
@@ -32,11 +32,9 @@ urlpatterns = [
     path('auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
     path('auth/registration/', RegisterView.as_view(), name='rest_register'),
     path('auth/registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    path('auth/registration/verify-email/<key>/', VerifyEmailView.as_view(), name='rest_verify_email'),
     path('auth/registration/resend-email/', ResendEmailVerificationView.as_view(), name="rest_resend_email"),
-    # re_path(
-    #     r'^account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
-    #     name='account_confirm_email',
-    # ),
+    #re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmVerifyEmailView.as_view(), name='account_confirm_email'),
     # path(
     #     'account-email-verification-sent/', TemplateView.as_view(),
     #     name='account_email_verification_sent',),
