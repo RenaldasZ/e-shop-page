@@ -125,7 +125,7 @@ postgres = {
     }
 }
 # DATABASES = sqlite3 if DEBUG else postgres
-DATABASES = postgres
+DATABASES = sqlite3
 
 
 # Password validation
