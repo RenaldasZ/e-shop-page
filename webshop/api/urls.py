@@ -1,14 +1,17 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
+from django.http import response
+from django.views.generic import TemplateView
 from api.rest.router import router
 from api.views import (
     GoogleConnect,
     LoginView,
-    RegisterView
+    RegisterView,
+    ConfirmEmailView
 )
 
 from dj_rest_auth.registration.views import (
     VerifyEmailView,
-    ResendEmailVerificationView
+    ResendEmailVerificationView,
 )
 
 from dj_rest_auth.views import (
@@ -16,7 +19,7 @@ from dj_rest_auth.views import (
     PasswordResetConfirmView,
     LogoutView,
     UserDetailsView,
-    PasswordChangeView
+    PasswordChangeView,
 )
 
 
@@ -32,14 +35,12 @@ urlpatterns = [
     path('auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
     path('auth/registration/', RegisterView.as_view(), name='rest_register'),
     path('auth/registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    #path('auth/registration/verify-email/<key>/', VerifyEmailView.as_view(), name='rest_verify_email'),
     path('auth/registration/resend-email/', ResendEmailVerificationView.as_view(), name="rest_resend_email"),
-    # re_path(
-    #     r'^account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
-    #     name='account_confirm_email',
-    # ),
-    # path(
-    #     'account-email-verification-sent/', TemplateView.as_view(),
-    #     name='account_email_verification_sent',),
+    re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(), name='account_confirm_email'),
+    path(
+        'account-email-verification-sent/', TemplateView.as_view(),
+        name='account_email_verification_sent',),
     path('auth/google/connect/', GoogleConnect.as_view(), name='google_connect'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

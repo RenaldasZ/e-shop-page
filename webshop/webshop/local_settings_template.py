@@ -10,6 +10,12 @@ EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 DEFAULT_FROM_EMAIL = "" 
 
+POSTGRES_DB = "postgres"
+POSTGRES_USER = "webshop"
+POSTGRES_PASSWORD = "postgres"
+POSTGRES_HOST = "postgres"
+POSTGRES_PORT = "5432"
+
 from django.core.management.utils import get_random_secret_key
 
 for i in list(range(10)):

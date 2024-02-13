@@ -1,0 +1,70 @@
+version: '3.8'
+services:
+  webshop:
+    build: 
+      context: .
+      # dockerfile: ./docker/python/Dockerfile
+      # args:
+    image: python:webshop
+    container_name: webshop
+    tty: true
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    links:
+      - db:postgres
+    env_file:
+      - ./webshop/webshop/local_settings.py
+    command: >
+      bash -c "python webshop/wait_for_postgres.py &&
+               python webshop/manage.py migrate &&
+               python webshop/manage.py collectstatic --noinput &&
+               cd webshop &&
+               gunicorn webshop.wsgi --bind 0.0.0.0:8000"  
+    # python webshop/manage.py compilemessages &&
+  db:
+    build: 
+      context: ./docker/postgres/
+    image: postgres:webshop
+    container_name: webshop.db
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+    env_file:
+      - ./webshop/webshop/local_settings.py
+
+  nginx:
+      build:
+        context: ./docker/nginx/
+      image: nginx:webshop
+      container_name: webshop.nginx
+      restart: always
+      ports:
+        - 80:80
+        - 443:443
+      links:
+        - webshop:webshop
+      depends_on:
+        - webshop
+      volumes:
+        - ./webshop/media:/app/webshop/media
+        - ./webshop/static:/app/webshop/static
+        - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        - ./docker/nginx/certbot/conf:/etc/letsencrypt
+        - ./docker/nginx/certbot/www:/var/www/certbot
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: webshop.letsencrypt
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./nginx/certbot/conf:/etc/letsencrypt
+  #     - ./nginx/certbot/www:/var/www/certbot
+    
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 60h & wait $${!}; done;'"
+    
