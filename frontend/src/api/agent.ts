@@ -39,9 +39,9 @@ const requests = {
 
 const Users = {
   loginUser: (values: object) => requests.post("auth/login/", values, true),
-  registerUser: (values: object) => requests.post("users/", values),
+  registerUser: (values: object) => requests.post("auth/registration/", values),
   logoutUser: () => requests.post("auth/logout/", {}, true),
-  getUserInfo: () => requests.get("users/", true),
+  getUserInfo: () => requests.get("auth/user/", true),
 };
 
 const Token = {

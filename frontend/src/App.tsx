@@ -53,8 +53,8 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContainer closeOnClick position="bottom-right" theme="colored" />
       <CssBaseline />
+      <ToastContainer closeOnClick position="bottom-right" theme="colored" />
       <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
       <Container sx={{ mt: 2 }}>
         <Outlet />

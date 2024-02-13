@@ -14,9 +14,8 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import { LoginContext } from "../context/LoginContext";
-import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { Button } from "@mui/base";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,13 +60,21 @@ export default function Login() {
         code: codeResponse.code,
       });
 
-      setUserName(tokens.data.user.email);
+      console.log(codeResponse);
+      console.log(tokens.data.user.first_name);
+      console.log(tokens.data.user.user_has_usable_password);
+
+      setUserName(tokens.data.user.first_name);
+
       setUserId(tokens.data.user.pk);
-      localStorage.setItem("username-eshop", tokens.data.user.email);
+      localStorage.setItem("username-eshop", tokens.data.user.first_name);
       localStorage.setItem("userId-eshop", tokens.data.user.pk);
+      toast.success("Login Successful");
       navigation("/");
     },
-    onError: (errorResponse) => console.log(errorResponse),
+    onError: async (errorResponse) => {
+      console.log("error", errorResponse);
+    },
   });
 
   if (isLoading) {
@@ -96,11 +103,11 @@ export default function Login() {
         <TextField
           margin="normal"
           fullWidth
-          label="Username"
-          {...register("username", { required: "Username is required" })}
-          error={!!errors.username}
-          helperText={errors?.username?.message as string}
-          autoComplete="current-username"
+          label="Email"
+          {...register("email", { required: "email is required" })}
+          error={!!errors.email}
+          helperText={errors?.email?.message as string}
+          autoComplete="current-email"
         />
         <TextField
           margin="normal"
@@ -122,7 +129,9 @@ export default function Login() {
         >
           {userId === null ? "Sing In" : "You Already Logged In"}
         </LoadingButton>
-        <Button onClick={() => handleGoogleLoginSuccess()}> Sign in with Google</Button>
+        <Box display="flex" justifyContent="center" sx={{ mb: 2, mt: 1, width: "100%" }}>
+          <GoogleLogin onSuccess={handleGoogleLoginSuccess} size="large" shape="pill" />
+        </Box>
         <Grid container>
           <Grid item>
             <Link to="/Register">{"Don't have an account? Sign Up"}</Link>

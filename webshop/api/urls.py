@@ -1,31 +1,46 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
+from django.http import response
+from django.views.generic import TemplateView
 from api.rest.router import router
 from api.views import (
-    FacebookConnect, 
-    TwitterConnect,
-    GithubConnect,
     GoogleConnect,
-    LoginView
+    LoginView,
+    RegisterView,
+    ConfirmEmailView
+)
+
+from dj_rest_auth.registration.views import (
+    VerifyEmailView,
+    ResendEmailVerificationView,
+)
+
+from dj_rest_auth.views import (
+    PasswordResetView,
+    PasswordResetConfirmView,
+    LogoutView,
+    UserDetailsView,
+    PasswordChangeView,
 )
 
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+     # URLs that do not require a session or valid token
     path('auth/login/', LoginView.as_view(), name='rest_login'),
-    path('auth/', include('dj_rest_auth.urls')),
-    #  # URLs that do not require a session or valid token
-    # path('password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
-    # path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
-    # # URLs that require a user to be logged in with a valid session / token.
-    # path('logout/', LogoutView.as_view(), name='rest_logout'),
-    # path('user/', UserDetailsView.as_view(), name='rest_user_details'),
-    # path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
-    path('auth/registration/', include('dj_rest_auth.registration.urls')),
-    # path('auth/facebook/connect/', FacebookConnect.as_view(), name='fb_connect'),
-    # path('auth/twitter/connect/', TwitterConnect.as_view(), name='twitter_connect'),
-    # path('auth/github/connect/', GithubConnect.as_view(), name='github_connect'),
+    path('auth/password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
+    path('auth/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
+    # URLs that require a user to be logged in with a valid session / token.
+    path('auth/logout/', LogoutView.as_view(), name='rest_logout'),
+    path('auth/user/', UserDetailsView.as_view(), name='rest_user_details'),
+    path('auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+    path('auth/registration/', RegisterView.as_view(), name='rest_register'),
+    path('auth/registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    #path('auth/registration/verify-email/<key>/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    path('auth/registration/resend-email/', ResendEmailVerificationView.as_view(), name="rest_resend_email"),
+    re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(), name='account_confirm_email'),
+    path(
+        'account-email-verification-sent/', TemplateView.as_view(),
+        name='account_email_verification_sent',),
     path('auth/google/connect/', GoogleConnect.as_view(), name='google_connect'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

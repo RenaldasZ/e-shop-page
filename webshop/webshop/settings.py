@@ -30,7 +30,7 @@ SECRET_KEY = local_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,7 +68,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'api.middleware.APILocalhostOnlyMiddleware',
+    # 'api.middleware.APILocalhostOnlyMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,6 +86,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             FRONTEND_DIR.joinpath('html'),
+            BACKEND_DIR.joinpath('static')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -107,12 +108,24 @@ WSGI_APPLICATION = 'webshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+sqlite3 = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BACKEND_DIR / 'db.sqlite3',
     }
 }
+postgres = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': local_settings.POSTGRES_HOST,
+        'NAME': local_settings.POSTGRES_DB,
+        'USER': local_settings.POSTGRES_USER,
+        'PASSWORD': local_settings.POSTGRES_PASSWORD,
+        'PORT': local_settings.POSTGRES_PORT,
+    }
+}
+DATABASES = sqlite3 if DEBUG else postgres
+# DATABASES = postgres
 
 
 # Password validation
@@ -227,7 +240,7 @@ CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
 CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
-CSRF_USE_SESSIONS = True
+CSRF_USE_SESSIONS = False
 
 INTERNAL_IPS = (
     '127.0.0.1',
@@ -264,10 +277,16 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
     ),
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.BrowsableAPIRenderer',
+    #     # 'rest_framework.renderers.JSONRenderer',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
         #'rest_framework.authentication.SessionAuthentication',
@@ -278,11 +297,25 @@ REST_FRAMEWORK = {
 }
 
 
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_HOST = local_settings.EMAIL_HOST
+EMAIL_PORT = local_settings.EMAIL_PORT
+EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = local_settings.EMAIL_USE_TLS
+# EMAIL_USE_SSL = local_settings.EMAIL_USE_SSL
+# EMAIL_SSL_KEYFILE = local_settings.EMAIL_SSL_KEYFILE
+# EMAIL_SSL_CERTFILE = local_settings.EMAIL_SSL_CERTFILE
 
 
 # ALLAUTH settings
-AUTHENTICATION_METHOD = "username"
-EMAIL_VERIFICATION = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = True
 LOGIN_ATTEMPTS_LIMIT = 10
 REAUTHENTICATION_REQUIRED = False
 LOGOUT_ON_PASSWORD_CHANGE = True
@@ -327,14 +360,14 @@ SOCIALACCOUNT_PROVIDERS = {
         "email",
     ],
     "AUTH_PARAMS": {
-        "access_type": "online",
+        "access_type": "offline",
     }
 }}
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
+AUTHENTICATION_BACKENDS = (
+   "django.contrib.auth.backends.ModelBackend",
+   "allauth.account.auth_backends.AuthenticationBackend"
+)
 
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

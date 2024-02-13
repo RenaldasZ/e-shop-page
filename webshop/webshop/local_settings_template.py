@@ -1,4 +1,20 @@
-SECRET_KEY = '$dd-8^j7v#^xyv20*-uxnid*biijooeuz#76d82d9brd6ewte^'
+SECRET_KEY = 'q5szki5s05hn&6&n03iusbl(uk5&146bc*a4(+@8@dhh7gx&le'
+GOOGLE_CLIENT_ID = ""
+GOOGLE_SECRET_KEY = ""
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+DEFAULT_FROM_EMAIL = "" 
+
+POSTGRES_DB = "postgres"
+POSTGRES_USER = "webshop"
+POSTGRES_PASSWORD = "postgres"
+POSTGRES_HOST = "postgres"
+POSTGRES_PORT = "5432"
 
 from django.core.management.utils import get_random_secret_key
 
