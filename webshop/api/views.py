@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.views import APIView, Response
 from allauth.account import app_settings
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
@@ -60,3 +61,9 @@ class LoginView(LoginView):
 
 class RegisterView(RegisterView):
     serializer_class = RegisterSerializer
+
+class ConfirmEmailView(APIView):
+    permission_classes = [permissions.AllowAny] 
+
+    def get(*args, **kwargs):
+        return Response({'details': 'ok'})
