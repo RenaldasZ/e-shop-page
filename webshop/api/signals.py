@@ -17,7 +17,7 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(pre_save, sender=get_user_model()) 
 def check_username(sender, instance, **kwargs):
     username_exists = get_user_model().objects.filter(username=instance.username).exists()
-    if username_exists or instance.username is "":
+    if username_exists or instance.username == "":
         instance.username = generate_username()
 
 
