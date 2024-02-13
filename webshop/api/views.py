@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+from rest_framework.views import APIView, Response
+from allauth.account import app_settings
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialConnectView
@@ -12,7 +15,8 @@ from dj_rest_auth.views import (
     UserDetailsView,
 )
 from dj_rest_auth.registration.views import (
-    RegisterView
+    RegisterView,
+    VerifyEmailView
 )
 from rest_framework import status, permissions
 
@@ -55,7 +59,11 @@ class LoginView(LoginView):
         response.status_code = status.HTTP_200_OK
         return response
 
-
-
 class RegisterView(RegisterView):
     serializer_class = RegisterSerializer
+
+class ConfirmEmailView(APIView):
+    permission_classes = [permissions.AllowAny] 
+
+    def get(*args, **kwargs):
+        return Response({'details': 'ok'})
